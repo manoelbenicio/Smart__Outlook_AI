@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { JiraOffer, DailyAllocation } from "@packages/contracts/types";
+import type { JiraOffer, DailyAllocation } from "../types";
 
 interface KPIResponse {
     total_offers: number;

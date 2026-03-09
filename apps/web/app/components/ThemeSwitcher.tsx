@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Palette, Check, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { themes } from "@packages/ui/theme";
+import { themes } from "../theme";
 import { useTheme } from "./ThemeProvider";
 
 export function ThemeSwitcher() {

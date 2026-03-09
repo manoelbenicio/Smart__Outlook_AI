@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { themes, DEFAULT_THEME, ThemeTokens } from "@packages/ui/theme";
+import { themes, DEFAULT_THEME, ThemeTokens } from "../theme";
 
 interface ThemeContextType {
     currentTheme: ThemeTokens;

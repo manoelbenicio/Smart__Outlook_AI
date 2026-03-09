@@ -1,52 +1,119 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { useOfferStore } from "../../stores/useOfferStore";
 
+const COLORS = [
+    "var(--chart-0)", "var(--chart-1)", "var(--chart-2)",
+    "var(--chart-3)", "var(--chart-4)", "var(--chart-5)",
+];
+
 export function PracticeAnalytics() {
-    const { isLoading } = useOfferStore();
+    const { offers, isLoading } = useOfferStore();
+
+    const chartData = useMemo(() => {
+        if (!offers.length) return [];
+
+        const practiceMap = new Map<string, { count: number; revenue: number }>();
+
+        for (const offer of offers) {
+            const practice = (offer as any).practice ?? (offer as any).practice ?? "Unknown";
+            const amount = (offer as any).total_amount ?? (offer as any).totalAmount ?? 0;
+            const entry = practiceMap.get(practice) || { count: 0, revenue: 0 };
+            entry.count += 1;
+            entry.revenue += amount;
+            practiceMap.set(practice, entry);
+        }
+
+        return Array.from(practiceMap.entries())
+            .map(([name, data]) => ({ name, count: data.count, revenue: data.revenue }))
+            .sort((a, b) => b.revenue - a.revenue);
+    }, [offers]);
 
     if (isLoading) {
         return <div className="animate-pulse bg-[var(--color-bg)] rounded w-full h-full min-h-[400px]" />;
     }
 
-    const dummyData = [
-        { name: "Digital", value: 400 },
-        { name: "Strategy", value: 300 },
-        { name: "Operations", value: 300 },
-        { name: "Organization", value: 200 },
-    ];
+    if (!chartData.length) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px] text-[var(--color-muted)]">
+                No offer data — upload a CSV to see practice analytics.
+            </div>
+        );
+    }
 
-    const COLORS = ["var(--chart-0)", "var(--chart-1)", "var(--chart-2)", "var(--chart-3)"];
+    const totalRevenue = chartData.reduce((s, d) => s + d.revenue, 0);
 
     return (
         <div className="flex flex-col h-full w-full">
-            <h2 className="text-lg font-[var(--font-weight-bold)] text-[var(--color-primary)] mb-4">Practice Analytics Share</h2>
-            <div className="flex-1 w-full min-h-[400px]">
-                <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                        <Pie
-                            data={dummyData}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={80}
-                            outerRadius={140}
-                            fill="#8884d8"
-                            paddingAngle={5}
-                            dataKey="value"
-                        >
-                            {dummyData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <h2 className="text-lg font-[var(--font-weight-bold)] text-[var(--color-primary)] mb-4">
+                Practice Analytics — Revenue Share
+            </h2>
+
+            <div className="flex flex-col lg:flex-row gap-6 flex-1 w-full">
+                {/* Donut Chart */}
+                <div className="flex-1 min-h-[350px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                            <Pie
+                                data={chartData}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={80}
+                                outerRadius={140}
+                                paddingAngle={3}
+                                dataKey="revenue"
+                                nameKey="name"
+                                animationBegin={0}
+                                animationDuration={800}
+                            >
+                                {chartData.map((_entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                            </Pie>
+                            <Tooltip
+                                contentStyle={{
+                                    backgroundColor: "var(--color-surface)",
+                                    borderColor: "var(--color-border)",
+                                    borderRadius: "var(--radius-card)",
+                                    color: "var(--color-text)",
+                                }}
+                                formatter={(value: number) => [`€${(value / 1000000).toFixed(2)}M`, "Revenue"]}
+                            />
+                            <Legend verticalAlign="bottom" height={36} />
+                        </PieChart>
+                    </ResponsiveContainer>
+                </div>
+
+                {/* Practice Breakdown Table */}
+                <div className="w-full lg:w-[320px] overflow-auto">
+                    <table className="w-full text-sm">
+                        <thead>
+                            <tr className="border-b border-[var(--color-border)]">
+                                <th className="text-left py-2 text-[var(--color-muted)] font-medium">Practice</th>
+                                <th className="text-right py-2 text-[var(--color-muted)] font-medium">Offers</th>
+                                <th className="text-right py-2 text-[var(--color-muted)] font-medium">Revenue</th>
+                                <th className="text-right py-2 text-[var(--color-muted)] font-medium">Share</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {chartData.map((row, idx) => (
+                                <tr key={row.name} className="border-b border-[var(--color-border)] border-opacity-40">
+                                    <td className="py-2 flex items-center gap-2">
+                                        <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: COLORS[idx % COLORS.length] }} />
+                                        <span className="truncate max-w-[140px]">{row.name}</span>
+                                    </td>
+                                    <td className="text-right py-2 text-[var(--color-muted)]">{row.count}</td>
+                                    <td className="text-right py-2 font-medium">€{(row.revenue / 1000000).toFixed(2)}M</td>
+                                    <td className="text-right py-2 text-[var(--color-accent)] font-medium">
+                                        {totalRevenue > 0 ? ((row.revenue / totalRevenue) * 100).toFixed(1) : 0}%
+                                    </td>
+                                </tr>
                             ))}
-                        </Pie>
-                        <Tooltip
-                            contentStyle={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)", borderRadius: "var(--radius-card)" }}
-                            itemStyle={{ color: "var(--color-text)" }}
-                        />
-                        <Legend verticalAlign="bottom" height={36} />
-                    </PieChart>
-                </ResponsiveContainer>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

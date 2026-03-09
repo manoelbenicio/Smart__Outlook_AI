@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { ExecutiveKPIStrip } from "./ExecutiveKPIStrip";
 import { Filter, Upload, Download, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useOfferStore } from "../stores/useOfferStore";
 
-// Placeholder imports for tabs and simulator
+// Tab and simulator imports
 import { AllocationHeatmap } from "./tabs/AllocationHeatmap";
 import { ForecastTimeline } from "./tabs/ForecastTimeline";
 import { FinancialExposure } from "./tabs/FinancialExposure";
@@ -29,6 +30,13 @@ const TABS = [
 
 export function AppShell() {
     const [activeTab, setActiveTab] = useState(TABS[0].id);
+    const { fetchOffers, fetchAllocations, fetchKpis } = useOfferStore();
+
+    useEffect(() => {
+        fetchOffers();
+        fetchAllocations();
+        fetchKpis();
+    }, []);
 
     const ActiveComponent = TABS.find((t) => t.id === activeTab)?.component || AllocationHeatmap;
 

@@ -49,17 +49,19 @@ if (!(docker info 2>$null)) {
 Write-Success "Docker is running."
 
 # Check .env file
-$envPath = Join-Path $PSScriptRoot "infra" ".env"
+$envPath = Join-Path (Join-Path $PSScriptRoot "infra") ".env"
 if (!(Test-Path $envPath)) {
     Write-WarningMsg "infra/.env not found. Copying infra/.env.example to infra/.env..."
-    $examplePath = Join-Path $PSScriptRoot "infra" ".env.example"
+    $examplePath = Join-Path (Join-Path $PSScriptRoot "infra") ".env.example"
     if (Test-Path $examplePath) {
         Copy-Item $examplePath $envPath
         Write-Success "infra/.env created. Please update it with real values if needed."
-    } else {
+    }
+    else {
         Write-Fatal "infra/.env.example not found. Cannot create .env."
     }
-} else {
+}
+else {
     Write-Success "infra/.env found."
 }
 
@@ -67,7 +69,7 @@ if (!(Test-Path $envPath)) {
 # --- 2. Determine Services to Start ---
 Write-Header "Starting Services"
 
-$composeFile = Join-Path $PSScriptRoot "infra" "docker-compose.yml"
+$composeFile = Join-Path (Join-Path $PSScriptRoot "infra") "docker-compose.yml"
 $composeCmd = "docker compose -f `"$composeFile`" up -d"
 
 if ($Rebuild) {
@@ -77,10 +79,12 @@ if ($Rebuild) {
 if ($BackendOnly) {
     Write-Host "Starting Backend services only (db, backend)..." -ForegroundColor Magenta
     $composeCmd += " db backend"
-} elseif ($FrontendOnly) {
+}
+elseif ($FrontendOnly) {
     Write-Host "Starting Frontend service only..." -ForegroundColor Magenta
     $composeCmd += " frontend"
-} else {
+}
+else {
     Write-Host "Starting full stack (db, backend, frontend)..." -ForegroundColor Magenta
 }
 
@@ -98,9 +102,11 @@ Write-Header "Waiting for Services to become Healthy"
 $servicesToCheck = @()
 if ($BackendOnly) {
     $servicesToCheck = @("smartoffer-db", "smartoffer-api")
-} elseif ($FrontendOnly) {
+}
+elseif ($FrontendOnly) {
     $servicesToCheck = @("smartoffer-web")
-} else {
+}
+else {
     $servicesToCheck = @("smartoffer-db", "smartoffer-api", "smartoffer-web")
 }
 
@@ -120,7 +126,8 @@ foreach ($serviceName in $servicesToCheck) {
             $isHealthy = $true
             Write-Host " [HEALTHY]" -ForegroundColor Green
             break
-        } elseif ($status -eq "unhealthy") {
+        }
+        elseif ($status -eq "unhealthy") {
             Write-Host " [FAILED HEALTHCHECK]" -ForegroundColor Red
             $allHealthy = $false
             break
@@ -150,6 +157,7 @@ if ($allHealthy) {
     if (-not $FrontendOnly) {
         Write-Host "Backend API is available at: http://localhost:8000/docs" -ForegroundColor Cyan
     }
-} else {
+}
+else {
     Write-WarningMsg "Some services failed to report as healthy. Check container logs with: docker compose -f .\infra\docker-compose.yml logs"
 }

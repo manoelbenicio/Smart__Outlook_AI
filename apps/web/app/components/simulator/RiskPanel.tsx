@@ -1,32 +1,134 @@
 "use client";
 
-import React from "react";
-import { AlertTriangle, ShieldAlert } from "lucide-react";
+import React, { useMemo } from "react";
+import { AlertTriangle, ShieldAlert, CheckCircle2 } from "lucide-react";
+import { useOfferStore } from "../../stores/useOfferStore";
+
+interface RiskItem {
+    severity: "critical" | "warning" | "info";
+    title: string;
+    detail: string;
+}
 
 export function RiskPanel() {
+    const { offers, allocations } = useOfferStore();
+
+    const risks = useMemo<RiskItem[]>(() => {
+        const items: RiskItem[] = [];
+
+        // 1. Overloaded architects
+        const overloaded = allocations.filter((a: any) => {
+            const total = a.total_allocation ?? a.totalAllocation ?? 0;
+            return total > 1.0;
+        });
+        if (overloaded.length > 0) {
+            const names = overloaded
+                .map((a: any) => a.architect_name ?? a.architectName)
+                .filter((v, i, arr) => arr.indexOf(v) === i)
+                .slice(0, 3);
+            items.push({
+                severity: "critical",
+                title: `${overloaded.length} Overloaded Allocation${overloaded.length > 1 ? "s" : ""}`,
+                detail: `${names.join(", ")}${overloaded.length > 3 ? ` +${overloaded.length - 3} more` : ""} exceed 100% capacity`,
+            });
+        }
+
+        // 2. Offers expiring within 30 days
+        const now = new Date();
+        const thirtyDays = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+        const expiring = offers.filter((o: any) => {
+            const ed = o.end_date ?? o.endDate;
+            if (!ed) return false;
+            const endDate = new Date(ed);
+            return endDate > now && endDate <= thirtyDays;
+        });
+        if (expiring.length > 0) {
+            items.push({
+                severity: "warning",
+                title: `${expiring.length} Offer${expiring.length > 1 ? "s" : ""} Expiring Soon`,
+                detail: `Ending within 30 days without confirmed renewal`,
+            });
+        }
+
+        // 3. High concentration risk (HHI)
+        const practiceRev = new Map<string, number>();
+        let grandTotal = 0;
+        for (const o of offers) {
+            const p = (o as any).practice ?? "Unknown";
+            const a = (o as any).total_amount ?? (o as any).totalAmount ?? 0;
+            practiceRev.set(p, (practiceRev.get(p) || 0) + a);
+            grandTotal += a;
+        }
+        if (grandTotal > 0) {
+            let hhi = 0;
+            for (const [, amt] of practiceRev) {
+                const share = (amt / grandTotal) * 100;
+                hhi += share * share;
+            }
+            if (hhi >= 2500) {
+                items.push({
+                    severity: "warning",
+                    title: "High Revenue Concentration",
+                    detail: `HHI ${Math.round(hhi).toLocaleString()} — portfolio is concentrated in few practices`,
+                });
+            }
+        }
+
+        // 4. Low-margin offers
+        const lowMargin = offers.filter((o: any) => (o.margin ?? 0) < 10 && (o.margin ?? 0) > 0);
+        if (lowMargin.length > 0) {
+            items.push({
+                severity: "info",
+                title: `${lowMargin.length} Low-Margin Offer${lowMargin.length > 1 ? "s" : ""}`,
+                detail: "Offers with margins below 10% may need pricing review",
+            });
+        }
+
+        return items;
+    }, [offers, allocations]);
+
+    const severityConfig = {
+        critical: { icon: AlertTriangle, color: "var(--color-danger)" },
+        warning: { icon: AlertTriangle, color: "var(--color-warning)" },
+        info: { icon: CheckCircle2, color: "var(--color-accent)" },
+    };
+
     return (
         <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-[var(--shadow-card)] flex flex-col p-4">
             <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[var(--color-border)]">
                 <ShieldAlert className="w-4 h-4 text-[var(--color-warning)]" />
-                <h2 className="text-sm font-[var(--font-weight-bold)] text-[var(--color-primary)]">Top Risk Factors (Mock)</h2>
+                <h2 className="text-sm font-[var(--font-weight-bold)] text-[var(--color-primary)]">
+                    Risk Factors
+                </h2>
+                {risks.length > 0 && (
+                    <span className="ml-auto text-xs px-1.5 py-0.5 rounded-full bg-[var(--color-danger)] text-white font-medium">
+                        {risks.length}
+                    </span>
+                )}
             </div>
 
-            <ul className="space-y-3">
-                <li className="flex gap-3 items-start">
-                    <AlertTriangle className="w-4 h-4 text-[var(--color-danger)] shrink-0 mt-0.5" />
-                    <div>
-                        <p className="text-sm font-medium text-[var(--color-text)] leading-tight">Architect A Overloaded</p>
-                        <p className="text-xs text-[var(--color-muted)] mt-0.5">Assigned to 14 concurrent offers (+140% capacity limit)</p>
-                    </div>
-                </li>
-                <li className="flex gap-3 items-start">
-                    <AlertTriangle className="w-4 h-4 text-[var(--color-warning)] shrink-0 mt-0.5" />
-                    <div>
-                        <p className="text-sm font-medium text-[var(--color-text)] leading-tight">Expiring Contracts</p>
-                        <p className="text-xs text-[var(--color-muted)] mt-0.5">3 strategic offers end in &lt; 30 days without renewal pipelines</p>
-                    </div>
-                </li>
-            </ul>
+            {risks.length === 0 ? (
+                <div className="flex items-center gap-2 text-sm text-[var(--color-success)]">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>No active risk factors detected</span>
+                </div>
+            ) : (
+                <ul className="space-y-3">
+                    {risks.map((risk, idx) => {
+                        const config = severityConfig[risk.severity];
+                        const Icon = config.icon;
+                        return (
+                            <li key={idx} className="flex gap-3 items-start">
+                                <Icon className="w-4 h-4 shrink-0 mt-0.5" style={{ color: config.color }} />
+                                <div>
+                                    <p className="text-sm font-medium text-[var(--color-text)] leading-tight">{risk.title}</p>
+                                    <p className="text-xs text-[var(--color-muted)] mt-0.5">{risk.detail}</p>
+                                </div>
+                            </li>
+                        );
+                    })}
+                </ul>
+            )}
         </div>
     );
 }

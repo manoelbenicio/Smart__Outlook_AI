@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { type JiraOffer, type DailyAllocation } from "@packages/contracts/types";
+import { type JiraOffer, type DailyAllocation } from "../types";
 import { useOfferStore } from "./useOfferStore";
 
 export interface SimulationAction {

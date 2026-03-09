@@ -1,22 +1,187 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
+import {
+    RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
+    ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell
+} from "recharts";
 import { useOfferStore } from "../../stores/useOfferStore";
+import { TrendingUp, Users, Target, Globe2, Layers, Percent } from "lucide-react";
+
+const COLORS = [
+    "var(--chart-0)", "var(--chart-1)", "var(--chart-2)",
+    "var(--chart-3)", "var(--chart-4)", "var(--chart-5)",
+];
 
 export function InvestorPresentation() {
-    const { isLoading } = useOfferStore();
+    const { offers, allocations, kpis, isLoading } = useOfferStore();
+
+    const metrics = useMemo(() => {
+        if (!offers.length) return null;
+
+        const totalRev = offers.reduce((s, o: any) => s + (o.total_amount ?? o.totalAmount ?? 0), 0);
+        const avgMargin = offers.reduce((s, o: any) => s + (o.margin ?? 0), 0) / offers.length;
+
+        // Practice diversification
+        const practices = new Set(offers.map((o: any) => o.practice).filter(Boolean));
+
+        // Country spread
+        const countries = new Set(offers.map((o: any) => o.country).filter(Boolean));
+
+        // Active architects
+        const architects = new Set(allocations.map((a: any) => a.architect_name ?? a.architectName));
+
+        // Weighted pipeline
+        const weightedPipeline = offers.reduce((s, o: any) => s + (o.weighted_amount ?? o.weightedAmount ?? 0), 0);
+
+        // Renewal rate
+        const renewals = offers.filter((o: any) => o.renewal === true).length;
+        const renewalRate = offers.length > 0 ? (renewals / offers.length) * 100 : 0;
+
+        // Radar data — normalize each dimension to 0–100
+        const radarData = [
+            { metric: "Revenue Scale", value: Math.min((totalRev / 50000000) * 100, 100) },
+            { metric: "Margin Health", value: Math.min(avgMargin * 3, 100) },
+            { metric: "Practice Diversity", value: Math.min(practices.size * 20, 100) },
+            { metric: "Geo Spread", value: Math.min(countries.size * 25, 100) },
+            { metric: "Team Scale", value: Math.min(architects.size * 10, 100) },
+            { metric: "Pipeline Strength", value: Math.min((weightedPipeline / 30000000) * 100, 100) },
+        ];
+
+        // Top countries bar data
+        const countryMap = new Map<string, number>();
+        for (const o of offers) {
+            const c = (o as any).country ?? "Unknown";
+            const a = (o as any).total_amount ?? (o as any).totalAmount ?? 0;
+            countryMap.set(c, (countryMap.get(c) || 0) + a);
+        }
+        const topCountries = Array.from(countryMap.entries())
+            .map(([country, revenue]) => ({ country, revenue }))
+            .sort((a, b) => b.revenue - a.revenue)
+            .slice(0, 6);
+
+        return {
+            totalRev, avgMargin, practiceCount: practices.size,
+            countryCount: countries.size, architectCount: architects.size,
+            weightedPipeline, renewalRate, radarData, topCountries,
+        };
+    }, [offers, allocations, kpis]);
 
     if (isLoading) {
         return <div className="animate-pulse bg-[var(--color-bg)] rounded w-full h-full min-h-[400px]" />;
     }
 
+    if (!metrics) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px] text-[var(--color-muted)]">
+                No offer data — upload a CSV to see the investor presentation.
+            </div>
+        );
+    }
+
+    const summaryCards = [
+        { icon: TrendingUp, label: "Total Revenue", value: `€${(metrics.totalRev / 1000000).toFixed(1)}M`, color: "var(--color-accent)" },
+        { icon: Percent, label: "Avg Margin", value: `${metrics.avgMargin.toFixed(1)}%`, color: "var(--color-success)" },
+        { icon: Layers, label: "Practices", value: String(metrics.practiceCount), color: "var(--chart-2)" },
+        { icon: Globe2, label: "Countries", value: String(metrics.countryCount), color: "var(--chart-3)" },
+        { icon: Users, label: "Architects", value: String(metrics.architectCount), color: "var(--chart-4)" },
+        { icon: Target, label: "Weighted Pipeline", value: `€${(metrics.weightedPipeline / 1000000).toFixed(1)}M`, color: "var(--chart-1)" },
+    ];
+
     return (
-        <div className="flex flex-col h-full w-full">
-            <h2 className="text-lg font-[var(--font-weight-bold)] text-[var(--color-primary)] mb-4">Investor Presentation</h2>
-            <div className="flex-1 w-full flex items-center justify-center min-h-[400px]">
-                <p className="text-[var(--color-muted)] text-center">
-                    Holistic view of scaling score, practice share, and margins. Placeholder.
-                </p>
+        <div className="flex flex-col h-full w-full gap-6">
+            <h2 className="text-lg font-[var(--font-weight-bold)] text-[var(--color-primary)]">
+                Investor Presentation — Executive Summary
+            </h2>
+
+            {/* Summary KPI Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                {summaryCards.map((card) => (
+                    <div key={card.label} className="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg p-3 text-center">
+                        <card.icon className="w-5 h-5 mx-auto mb-1.5" style={{ color: card.color }} />
+                        <p className="text-xs text-[var(--color-muted)] mb-0.5">{card.label}</p>
+                        <p className="text-lg font-[var(--font-weight-bold)] text-[var(--color-text)]">{card.value}</p>
+                    </div>
+                ))}
+            </div>
+
+            {/* Charts Row */}
+            <div className="flex flex-col lg:flex-row gap-6 flex-1">
+                {/* Radar Chart */}
+                <div className="flex-1 min-h-[300px] bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg p-4">
+                    <h3 className="text-sm font-medium text-[var(--color-muted)] mb-2">Scaling Score</h3>
+                    <ResponsiveContainer width="100%" height={280}>
+                        <RadarChart data={metrics.radarData}>
+                            <PolarGrid stroke="var(--color-border)" />
+                            <PolarAngleAxis dataKey="metric" tick={{ fontSize: 11, fill: "var(--color-muted)" }} />
+                            <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 10 }} />
+                            <Radar
+                                name="Score"
+                                dataKey="value"
+                                stroke="var(--color-accent)"
+                                fill="var(--color-accent)"
+                                fillOpacity={0.25}
+                                strokeWidth={2}
+                            />
+                            <Tooltip
+                                contentStyle={{
+                                    backgroundColor: "var(--color-surface)",
+                                    borderColor: "var(--color-border)",
+                                    borderRadius: "var(--radius-card)",
+                                    color: "var(--color-text)",
+                                }}
+                            />
+                        </RadarChart>
+                    </ResponsiveContainer>
+                </div>
+
+                {/* Geographic Revenue Bar */}
+                <div className="flex-1 min-h-[300px] bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg p-4">
+                    <h3 className="text-sm font-medium text-[var(--color-muted)] mb-2">Revenue by Country</h3>
+                    <ResponsiveContainer width="100%" height={280}>
+                        <BarChart data={metrics.topCountries} layout="vertical" margin={{ left: 10, right: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" horizontal vertical={false} />
+                            <XAxis
+                                type="number"
+                                stroke="var(--color-muted)"
+                                tick={{ fontSize: 11 }}
+                                tickFormatter={(v) => `€${(v / 1000000).toFixed(1)}M`}
+                            />
+                            <YAxis
+                                dataKey="country"
+                                type="category"
+                                stroke="var(--color-muted)"
+                                tick={{ fontSize: 11 }}
+                                width={80}
+                            />
+                            <Tooltip
+                                cursor={{ fill: "transparent" }}
+                                contentStyle={{
+                                    backgroundColor: "var(--color-surface)",
+                                    borderColor: "var(--color-border)",
+                                    borderRadius: "var(--radius-card)",
+                                    color: "var(--color-text)",
+                                }}
+                                formatter={(value: number) => [`€${(value / 1000000).toFixed(2)}M`, "Revenue"]}
+                            />
+                            <Bar dataKey="revenue" radius={[0, 6, 6, 0]}>
+                                {metrics.topCountries.map((_, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                            </Bar>
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+            </div>
+
+            {/* Renewal Rate Footer */}
+            <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[var(--color-bg)] border border-[var(--color-border)] text-sm">
+                <Target className="w-4 h-4 text-[var(--color-accent)]" />
+                <span className="text-[var(--color-muted)]">Renewal Rate:</span>
+                <span className="font-[var(--font-weight-bold)] text-[var(--color-text)]">{metrics.renewalRate.toFixed(1)}%</span>
+                <span className="text-[var(--color-muted)]">|</span>
+                <span className="text-[var(--color-muted)]">Active Offers:</span>
+                <span className="font-[var(--font-weight-bold)] text-[var(--color-text)]">{offers.length}</span>
             </div>
         </div>
     );

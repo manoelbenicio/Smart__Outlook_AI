@@ -1,0 +1,110 @@
+SOLICITUD DE PROPUESTA (RFP)
+Migración Infraestructura Cloud — AWS Multi-Región
+Grupo Energía Latam S.A.
+
+Referencia: RFP-GEL-2026-0112
+Fecha de Emisión: 01/03/2026
+Plazo de Entrega: 15/05/2026
+Contacto: Carlos Andrés Mendoza (camendoza@grupoenergia.cl)
+
+---
+
+1. INFORMACIÓN DE LA EMPRESA
+
+Grupo Energía Latam S.A. es un holding energético chileno con presencia en Chile, Perú y Colombia, con facturación anual de USD 1.200 millones y 8.000 empleados. Actualmente opera su infraestructura IT en data centers propios (on-premise) y busca migrar a la nube pública de AWS para mejorar la resiliencia, escalabilidad y reducir costos operacionales.
+
+2. ALCANCE DEL PROYECTO
+
+2.1 Objetivo
+Migrar la infraestructura de TI del Grupo Energía Latam desde los data centers on-premise ubicados en Santiago de Chile y Lima, Perú, hacia AWS (Amazon Web Services), implementando una arquitectura multi-región (us-east-1 y sa-east-1) con alta disponibilidad y disaster recovery.
+
+2.2 Entregables
+- Assessment de infraestructura actual (inventario de 350+ servidores, 120 aplicaciones)
+- Diseño de arquitectura cloud (Landing Zone, networking, security)
+- Migración de 200 servidores en primera fase (wave planning con AWS Migration Hub)
+- Implementación de Infrastructure as Code (Terraform/CloudFormation)
+- Configuración de servicios AWS: EC2, RDS (PostgreSQL y Oracle), S3, Lambda, EKS
+- Implementación de seguridad: AWS GuardDuty, WAF, CloudTrail, IAM policies
+- Configuración de monitoreo: CloudWatch, Prometheus, Grafana
+- Plan de Disaster Recovery (RPO < 1 hora, RTO < 4 horas)
+- Capacitación de 30 ingenieros internos en AWS
+
+2.3 Duración
+Plazo total: 8 meses
+- Fase 1 - Assessment y Diseño: 2 meses
+- Fase 2 - Migración Wave 1 (servidores críticos): 3 meses
+- Fase 3 - Migración Wave 2 (aplicaciones no-críticas): 2 meses
+- Fase 4 - Optimización y Handover: 1 mes
+
+2.4 Equipo Mínimo
+- 1 Cloud Architect (certificación AWS Solutions Architect Professional obligatoria)
+- 2 Cloud Engineers (certificación AWS SysOps o DevOps obligatoria)
+- 1 Security Specialist (certificación AWS Security Specialty)
+- 1 Database Migration Specialist
+- 1 Project Manager (PMP o Prince2)
+Total: 6 profesionales
+
+2.5 Ubicación
+Trabajo remoto con presencia mensual de 3 días en Santiago de Chile. Viajes puntuales a Lima (Perú) y Bogotá (Colombia) para coordinación con equipos locales.
+
+3. REQUISITOS TÉCNICOS
+
+3.1 Tecnologías Obligatorias
+- AWS (EC2, RDS, S3, Lambda, EKS, CloudFront, Route53)
+- Terraform o AWS CloudFormation para IaC
+- Docker y Kubernetes (EKS)
+- PostgreSQL 15+ y Oracle 19c (migración RDS)
+- Git, Jenkins o AWS CodePipeline para CI/CD
+- Python y Bash para automatización
+
+3.2 Tecnologías Deseables
+- AWS Control Tower y Organizations para gobernanza multi-cuenta
+- Datadog o New Relic para observabilidad avanzada
+- Experiencia con migración desde VMware vSphere
+
+3.3 Certificaciones Obligatorias
+- AWS Solutions Architect Professional (al menos 1 profesional)
+- AWS DevOps Engineer Professional o SysOps Administrator (al menos 2 profesionales)
+- AWS Security Specialty (al menos 1 profesional)
+- Empresa: AWS Partner (Select Tier o superior)
+
+4. CONDICIONES COMERCIALES
+
+4.1 Presupuesto
+Presupuesto total: USD 850.000 (ochocientos cincuenta mil dólares americanos), que incluye:
+- Servicios profesionales de consultoría
+- Licenciamiento de herramientas de migración si aplica
+- Capacitaciones
+- Soporte post-migración (1 mes)
+
+Nota: Los costos de infraestructura AWS (consumo) son responsabilidad del Grupo Energía Latam.
+
+4.2 Forma de Pago
+- 15% al inicio del proyecto
+- 25% al completar el Assessment y Diseño
+- 30% al completar la Migración Wave 1
+- 20% al completar la Migración Wave 2
+- 10% al cierre del proyecto y handover
+
+4.3 Penalidades
+- Downtime no planificado durante migración de servidores críticos: USD 10.000 por hora de indisponibilidad.
+- Atraso en migración Wave 1 superior a 15 días: multa de 3% del valor total del contrato.
+- Breach de seguridad atribuible a configuración del proveedor: responsabilidad ilimitada por daños directos.
+
+5. CONDICIONES LEGALES
+
+5.1 Ley Aplicable: Legislación chilena
+5.2 Propiedad Intelectual: Todo código, scripts y documentación desarrollados durante el proyecto son propiedad compartida (Grupo Energía Latam licencia perpetua, proveedor retiene IP de frameworks genéricos).
+5.3 Confidencialidad: NDA obligatorio. Clasificación de datos según normativa CMF Chile.
+5.4 Protección de Datos: Cumplimiento con Ley 19.628 (Chile), Ley 29.733 (Perú) y Ley 1.581 (Colombia) para datos personales.
+5.5 Responsabilidad: Limitada a 2x el valor del contrato, excepto para breaches de seguridad (ilimitada).
+5.6 Subcontratación: Prohibida sin autorización previa por escrito.
+5.7 Auditoría: El Grupo Energía Latam se reserva el derecho de auditar las prácticas de seguridad del proveedor.
+
+6. CRITERIOS DE EVALUACIÓN
+
+- Experiencia en proyectos de migración cloud AWS similares (35%)
+- Certificaciones y calificación del equipo (25%)
+- Precio (20%)
+- Metodología y plan de migración (15%)
+- Referencias de clientes del sector energético (5%)

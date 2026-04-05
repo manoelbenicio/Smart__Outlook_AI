@@ -1,0 +1,114 @@
+SOLICITAÇÃO DE PROPOSTA (RFP)
+Implementação SAP S/4HANA — Módulos FI/CO/MM/SD
+TechBR Soluções S.A.
+
+Referência: RFP-TECHBR-2026-0045
+Data de Emissão: 15/03/2026
+Prazo de Entrega da Proposta: 30/04/2026
+Contato: Maria Fernanda Oliveira (mfoliveira@techbr.com.br)
+
+---
+
+1. SOBRE A EMPRESA
+
+A TechBR Soluções S.A. é uma empresa brasileira de médio porte do setor de manufatura industrial, sediada em Campinas-SP, com faturamento anual de R$ 800 milhões e aproximadamente 2.500 colaboradores. Atualmente utiliza um ERP legado (TOTVS Protheus) e busca modernizar seus processos financeiros, de compras e vendas através da migração para SAP S/4HANA.
+
+2. ESCOPO DO PROJETO
+
+2.1 Objetivo
+Implementar o SAP S/4HANA (release 2023) nos módulos FI (Financial Accounting), CO (Controlling), MM (Materials Management) e SD (Sales & Distribution), integrando com o sistema de chão de fábrica existente (MES) e com o portal de fornecedores (B2B).
+
+2.2 Entregáveis
+- Documento de Blueprint (BBP) aprovado
+- Configuração e customização dos 4 módulos
+- Desenvolvimento de 25 relatórios ABAP/Fiori customizados
+- 3 interfaces com sistemas legados (MES, B2B Portal, Folha de Pagamento)
+- Migração de dados de 5 anos (cadastros, saldos, transações abertas)
+- Treinamento de 150 usuários-chave e 500 usuários finais
+- Suporte pós-go-live de 3 meses (hypercare)
+
+2.3 Duração
+Prazo total estimado: 12 meses, divididos em:
+- Fase 1 - Preparação e Blueprint: 2 meses
+- Fase 2 - Realização: 5 meses
+- Fase 3 - Testes Integrados: 2 meses
+- Fase 4 - Go-Live e Hypercare: 3 meses
+
+2.4 Equipe Mínima Esperada
+O fornecedor deverá alocar no mínimo:
+- 1 Gerente de Projeto (PMP ou equivalente)
+- 2 Consultores Funcionais FI/CO (certificação SAP obrigatória)
+- 2 Consultores Funcionais MM/SD (certificação SAP obrigatória)
+- 1 Desenvolvedor ABAP/Fiori Senior
+- 1 Especialista em Migração de Dados
+- 1 Especialista em Integrações (PI/PO ou CPI)
+Total: 8 profissionais (podendo ser ajustado conforme proposta)
+
+2.5 Local de Trabalho
+Modelo híbrido: presença obrigatória na sede de Campinas-SP 3 dias por semana (terça a quinta). Viagens eventuais às filiais em Manaus e Recife.
+
+3. REQUISITOS TÉCNICOS
+
+3.1 Tecnologias Obrigatórias
+- SAP S/4HANA 2023 (on-premise ou RISE with SAP)
+- SAP Fiori para UX
+- SAP PI/PO ou SAP Integration Suite (CPI) para integrações
+- ABAP for Cloud ou ABAP clássico para desenvolvimentos
+- SAP Solution Manager ou SAP Cloud ALM para gestão
+
+3.2 Tecnologias Desejáveis
+- SAP Analytics Cloud para relatórios avançados
+- SAP Build para low-code/no-code
+- Experiência com migração de TOTVS Protheus
+
+3.3 Certificações Obrigatórias
+- Consultores: certificação SAP nos respectivos módulos
+- Gerente de Projeto: PMP, Prince2 ou equivalente
+- Empresa: SAP Partner (Gold ou Platinum)
+
+4. CONDIÇÕES COMERCIAIS
+
+4.1 Valor Estimado
+Orçamento aprovado pela diretoria: R$ 2.500.000,00 (dois milhões e quinhentos mil reais), incluindo:
+- Serviços de consultoria e implementação
+- Licenças adicionais se necessário
+- Treinamentos
+- Suporte Hypercare (3 meses)
+
+4.2 Forma de Pagamento
+Pagamentos vinculados a entregas (milestone-based):
+- 10% na assinatura do contrato
+- 20% na aprovação do Blueprint
+- 30% na conclusão da Fase de Realização
+- 20% no Go-Live
+- 20% após aprovação do período de Hypercare
+
+4.3 Penalidades
+- Atraso superior a 15 dias em qualquer milestone: multa de 2% do valor do contrato por semana de atraso, limitada a 10%.
+- Indisponibilidade de recurso-chave sem substituto em 5 dias úteis: multa de R$ 5.000/dia.
+- Go-Live adiado por mais de 30 dias sem justificativa aceita: direito de rescisão unilateral sem ônus para a TechBR.
+
+5. CONDIÇÕES LEGAIS
+
+5.1 Lei Aplicável: Legislação brasileira (Código Civil, Lei 13.709 - LGPD)
+5.2 Propriedade Intelectual: Todos os desenvolvimentos específicos (ABAP, relatórios, interfaces) serão propriedade exclusiva da TechBR Soluções após pagamento integral.
+5.3 Confidencialidade: NDA obrigatório antes do início dos trabalhos.
+5.4 LGPD: O fornecedor deve comprovar conformidade com a LGPD (Lei Geral de Proteção de Dados) para tratamento de dados pessoais de colaboradores e fornecedores da TechBR.
+5.5 Responsabilidade: Limitada ao valor total do contrato.
+5.6 Subcontratação: Permitida para até 30% do escopo, com aprovação prévia por escrito da TechBR.
+
+6. CRITÉRIOS DE AVALIAÇÃO
+
+As propostas serão avaliadas com base nos seguintes critérios:
+- Experiência comprovada em projetos SAP S/4HANA similares (30%)
+- Qualificação da equipe proposta (25%)
+- Preço e condições comerciais (25%)
+- Metodologia e cronograma (15%)
+- Referências de clientes (5%)
+
+7. INSTRUÇÕES PARA ENVIO DA PROPOSTA
+
+Formato: PDF, máximo 50 páginas
+Envio: mfoliveira@techbr.com.br com cópia para compras@techbr.com.br
+Prazo: até 30/04/2026 às 18:00 (horário de Brasília)
+Briefing presencial: 25/03/2026, 14:00, sede Campinas-SP (participação obrigatória)

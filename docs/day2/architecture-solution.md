@@ -24,13 +24,13 @@ A solucao Smart Offer e um sistema de gestao comercial para:
 ## 3. Arquitetura Fisica (Deployment)
 
 ### 3.1 Topologia fisica atual
-
 ```mermaid
 graph TD
     User[Usuario - Navegador]
     Host[Host/VM com Docker Compose]
     Internet[Internet]
     Gemini[Google Gemini API]
+
 
     subgraph Host/VM
       Web[Container smartoffer-web<br/>Node 22 Alpine<br/>Porta 3000]

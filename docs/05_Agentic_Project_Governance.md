@@ -5,7 +5,7 @@
 |---|---|
 | **Projeto** | AI Smart Organizer — RFP Auto-Diligence Pipeline |
 | **Metodologia** | Agile (Scrum-like) com Governança Agêntica |
-| **Status** | ⏳ PENDING APPROVAL |
+| **Status** | 🔄 IN PROGRESS (Phase 4 — Flow Development) |
 | **Data** | 2026-04-05 |
 | **Project Owner** | Manoel Benicio (mbenicios@minsait.com) |
 
@@ -92,23 +92,23 @@ ASSINATURAS:
 
 | ID | User Story | Owner | Acceptance Criteria | Status |
 |---|---|---|---|---|
-| S0-01 | Como admin, preciso do SharePoint site criado | CODEX | Site `/sites/OfertasDN` acessível com pastas | TODO |
-| S0-02 | Como admin, preciso das tables Dataverse criadas | CODEX | 2 tables com todas as colunas conforme TDD | TODO |
-| S0-03 | Como admin, preciso do template Word uploadado | CODEX | Template em `/Templates/` no SharePoint | TODO |
-| S0-04 | Como admin, preciso verificar AI Builder credits | OPUS (browser) | Screenshot do admin center com quota | TODO |
-| S0-05 | Como arquiteto, preciso validar permissões | OPUS (browser) | Checklist de permissões validado | TODO |
+| S0-01 | Como admin, preciso do SharePoint site criado | CODEX | Site `/sites/OfertasDN` acessível com pastas | ✅ DONE |
+| S0-02 | Como admin, preciso das tables Dataverse criadas | CODEX | 2 tables com todas as colunas conforme TDD | ✅ DONE (1 table + JSON columns) |
+| S0-03 | Como admin, preciso do template Word uploadado | CODEX | Template em `/Templates/` no SharePoint | ⏳ DEFERRED |
+| S0-04 | Como admin, preciso verificar AI Builder credits | OPUS (browser) | Screenshot do admin center com quota | ✅ DONE |
+| S0-05 | Como arquiteto, preciso validar permissões | OPUS (browser) | Checklist de permissões validado | ✅ DONE |
 
 ### Sprint 1 — AI + Flows Core
 
 | ID | User Story | Owner | Acceptance Criteria | Status |
 |---|---|---|---|---|
-| S1-01 | Como sistema, preciso do prompt Classify_Offer | OPUS (design) + CODEX (deploy) | JSON válido para 3 amostras | TODO |
-| S1-02 | Como sistema, preciso do prompt Extract_Fields | OPUS + CODEX | Campos mapeados corretamente | TODO |
-| S1-03 | Como sistema, preciso do prompt Tech_Practices | OPUS + CODEX | Arrays não-vazios para amostra | TODO |
-| S1-04 | Como sistema, preciso do prompt GoNoGo_Score | OPUS + CODEX | Scorecard com 5 dimensões | TODO |
-| S1-05 | Como sistema, preciso do Flow 1 (Email Intake) | CODEX | Email salvo no SharePoint | TODO |
-| S1-06 | Como sistema, preciso do Flow 2 (Pipeline) | CODEX | raw_extract.txt gerado | TODO |
-| S1-07 | Como sistema, preciso do Flow 3 (Report) | CODEX | Email report enviado | TODO |
+| S1-01 | Como sistema, preciso do prompt Classify_Offer | OPUS (design) + CODEX (deploy) | JSON válido para 3 amostras | ✅ DONE |
+| S1-02 | Como sistema, preciso do prompt Extract_Fields | OPUS + CODEX | Campos mapeados corretamente | ✅ DONE |
+| S1-03 | Como sistema, preciso do prompt Tech_Practices | OPUS + CODEX | Arrays não-vazios para amostra | ✅ DONE |
+| S1-04 | Como sistema, preciso do prompt GoNoGo_Score | OPUS + CODEX | Scorecard com 5 dimensões | ✅ DONE |
+| S1-05 | Como sistema, preciso do Flow 1 (Email Intake) | CODEX | Email salvo no SharePoint | ✅ CREATED |
+| S1-06 | Como sistema, preciso do Flow 2 (Pipeline) | CODEX | raw_extract.txt gerado | ✅ CREATED (7 actions) |
+| S1-07 | Como sistema, preciso do Flow 3 (Report) | CODEX | Email report enviado | ✅ CREATED |
 
 ### Sprint 2 — Integração E2E + QA
 
@@ -431,8 +431,9 @@ OPUS: [timestamp]  CODEX: [timestamp]  MANOEL: [timestamp]
 
 | Documento | Status |
 |---|---|
-| SAD v2.0 | ⏳ PENDING |
-| TDD v2.0 | ⏳ PENDING |
-| Ops Manual v2.0 | ⏳ PENDING |
-| Functional Spec v1.0 | ⏳ PENDING |
-| **Governance Framework v1.0** | **⏳ PENDING** |
+| SAD v2.1 | ✅ UPDATED |
+| TDD v2.1 | ✅ UPDATED |
+| Ops Manual v2.1 | ✅ UPDATED |
+| Functional Spec v2.1 | ✅ UPDATED |
+| Power Automate Config Guide | ✅ NEW |
+| **Governance Framework v1.0** | **🔄 IN PROGRESS** |

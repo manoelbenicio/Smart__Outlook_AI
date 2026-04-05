@@ -23,33 +23,25 @@ An automated pipeline that monitors the "Ofertas DN" shared mailbox, extracts da
 <!-- GSD:stack-start source:codebase/STACK.md -->
 ## Technology Stack
 
-## Runtime
-- **Node.js** — ES Modules (`.mjs`), CommonJS (`package.json: type=commonjs`)
-- **Python 3.13** — standalone scripts (no venv configured)
-## Languages
-- **JavaScript/Node.js** — POC scripts, streaming CSV parser (`analyze_inbox.mjs`, `poc_ms_graph.mjs`)
-- **Python** — Enterprise email analyzer (`email_analyzer_pro.py`)
-- **Markdown** — Documentation (5 enterprise docs in `docs/`)
-## Frameworks & Libraries
-### Node.js (`package.json`)
-| Package | Version | Purpose |
+## Production Stack (100% Microsoft Power Platform)
+| Component | Service | Purpose |
 |---|---|---|
-| `@azure/msal-node` | ^5.1.2 | MS Graph Device Code Flow auth (POC — **NO-GO**, blocked by tenant CA) |
-### Python (used in scripts, not in requirements.txt)
-| Package | Used In | Purpose |
-|---|---|---|
-| `pandas` | `email_analyzer_pro.py` | CSV loading, analysis, cross-tabulation |
-| `re` | `email_analyzer_pro.py` | Regex-based email classification (20+ rules) |
-| `json` | `email_analyzer_pro.py` | JSON output generation |
-## Configuration
-- `.env` — Not yet created (planned)
-- `.env.example` — Not yet created (planned)
-- `package.json` — Minimal, only MSAL dependency
-## Build & Run
-- No build step (scripts run directly)
-- No test framework configured (`"test": "echo Error..."`)
-- No CI/CD configured
-## Key Observation
+| **Orchestration** | Power Automate | 3 cloud flows (Intake, Processing, Report) |
+| **AI/ML** | AI Builder (GPT-4.1) | 4 custom prompts (Classify, Extract, Tech, GoNoGo) |
+| **Database** | Dataverse | Structured data (rfp_ofertas table) |
+| **File Storage** | SharePoint Online | Document libraries (Input, Extracted, Output, Templates) |
+| **Email** | Outlook 365 Connector | Shared mailbox trigger (Ofertas DN) |
+| **Agent** | Copilot Studio | Teams chatbot (Phase 7 — planned) |
+
+## POC Stack (Superseded)
+- **Node.js** — ES Modules (`.mjs`), MSAL auth POC (NO-GO)
+- **Python 3.13** — Email analyzer (`email_analyzer_pro.py`)
+- **PowerShell** — Deploy scripts (blocked by Entra ID)
+
+## Environment
+- **Power Platform:** ColOfertasBrasilPro (e2d10003-4d8e-e007-9d63-76d5fe89ef56)
+- **Dataverse:** https://colofertasbrasilpro.crm4.dynamics.com
+- **Repository:** https://github.com/manoelbenicio/Smart__Outlook_AI.git
 <!-- GSD:stack-end -->
 
 <!-- GSD:conventions-start source:CONVENTIONS.md -->
@@ -96,36 +88,31 @@ An automated pipeline that monitors the "Ofertas DN" shared mailbox, extracts da
 ## Architecture
 
 ## Current Pattern
-## Components
-### 1. Email Analysis (exploratory)
-- `analyze_inbox.mjs` — Node.js streaming CSV parser with Map-based accumulators
-- `email_analyzer_pro.py` — Python pandas-based deep classifier (20+ regex rules, 3-pass classification)
-- **Dependencies between them:** None (independent implementations of similar analysis)
-### 2. MS Graph POC (abandoned)
-- `poc_ms_graph.mjs` — MSAL Device Code Flow with multi-client-ID retry strategy
-- `poc_report.md` — Documented results (NO-GO)
-- `ms_graph_privilege_poc_antigravity.md` — Test plan and criteria
-### 3. RFP Diligence Framework (reference material)
-- `MASTER_PROMPT_RFP_Diligence_Orchestrator_v2.1_STRICT.md` — Framework specification
-- `rfp_engine/templates/RFP_Diligence_Templates_v2.1_STRICT/` — JSON schema + 14 CSV templates
-- **Not code** — these are specification/template files for the pipeline
-### 4. Documentation (enterprise)
-- `docs/01_SAD_Solution_Architecture_Document.md` — Architecture
-- `docs/02_TDD_Technical_Design_Document.md` — Technical Design
-- `docs/03_Operations_Manual.md` — Operations
-- `docs/04_Functional_Specification.md` — Functional
-- `docs/05_Agentic_Project_Governance.md` — Project governance (OPUS + CODEX agents)
+**Cloud-native serverless** — 100% Microsoft Power Platform. No custom code in production.
+
+## Production Components
+### 1. Power Automate Flows (Phase 4)
+- **RFP-01-Email-Intake** — Outlook V3 trigger → SharePoint → Dataverse
+- **RFP-02-Processing-Pipeline** — 4x AI Builder prompts → Dataverse update
+- **RFP-03-Report-Generation** — Compose report → Send email
+### 2. AI Builder Prompts (Phase 3)
+- 4 GPT-4.1 prompts: Classify, Extract, Tech, GoNoGo
+- Temperature 0.1, JSON-only output, Princípio Zero enforced
+### 3. Dataverse (Phase 1)
+- Table: rfp_ofertas (cr8b2_rfpofertases)
+- JSON storage columns: classification, extracted_fields, tech_catalog, gonogo
+### 4. SharePoint (Phase 1)
+- Libraries: Templates, Input, Extracted, Output
+
+## POC Components (Superseded)
+- `email_analyzer_pro.py` — Python email classifier
+- `analyze_inbox.mjs` — Node.js streaming parser
+- `poc_ms_graph.mjs` — MS Graph POC (NO-GO)
+
 ## Data Flow
 ```
+[Email] → [Flow 1] → [SharePoint + Dataverse] → [Flow 2] → [4x AI] → [Flow 3] → [Email Report]
 ```
-## Entry Points
-- `node analyze_inbox.mjs` — Run inbox analysis
-- `python email_analyzer_pro.py` — Run deep email classification
-- `node poc_ms_graph.mjs` — Run MS Graph POC (will fail)
-## Abstractions
-- `classify_subject_deep()` in `email_analyzer_pro.py` — 3-pass classifier (subject → sender → body)
-- `analyzeCSVStream()` in `analyze_inbox.mjs` — Streaming parser with constant memory
-- No shared abstractions between scripts
 <!-- GSD:architecture-end -->
 
 <!-- GSD:skills-start source:skills/ -->

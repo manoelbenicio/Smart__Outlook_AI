@@ -18,24 +18,34 @@ Every new offer gets a scored, evidence-backed GO/NO-GO recommendation delivered
 - ✓ RFP Diligence Framework v2.1 mapped (1 JSON schema + 14 CSV templates) — existing
 - ✓ Enterprise documentation created (SAD, TDD, Ops Manual, Func Spec, Governance) — existing
 - ✓ Codebase mapped (.planning/codebase/ — 7 documents) — existing
+- ✓ SharePoint site deployed with document libraries (Input, Extracted, Output, Templates) — Phase 1
+- ✓ Dataverse table rfp_ofertas created with all columns (including 4 JSON storage columns) — Phase 1
+- ✓ AI Builder Prompt Classify_Offer deployed and tested (GPT-4.1, JSON output) — Phase 2+3
+- ✓ AI Builder Prompt Extract_Fields deployed and tested (GPT-4.1, JSON output) — Phase 2+3
+- ✓ AI Builder Prompt Tech_Practices deployed and tested (GPT-4.1, JSON output) — Phase 2+3
+- ✓ AI Builder Prompt GoNoGo_Score deployed and tested (GPT-4.1, JSON output) — Phase 2+3
+- ✓ Power Automate Flow RFP-01-Email-Intake created (Outlook V3 trigger) — Phase 4
+- ✓ Power Automate Flow RFP-02-Processing-Pipeline created (4x AI Builder) — Phase 4
+- ✓ Power Automate Flow RFP-03-Report-Generation created (Compose + Email) — Phase 4
+- ✓ Flow configuration guide created with real screenshots — Phase 4
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] Power Automate captures new emails from Ofertas DN with all attachments
-- [ ] Attachments saved to SharePoint in organized folder structure per offer
-- [ ] AI Builder extracts text from PDF, DOCX, XLSX documents
-- [ ] AI Builder Prompt classifies offer type, client, value, deadline, horizontal
-- [ ] AI Builder Prompt maps extracted data to RFP Template v2.1 fields
-- [ ] AI Builder Prompt catalogs technologies and practices mentioned
-- [ ] AI Builder Prompt scores GO/NO-GO across 5 mandatory dimensions (1-5 each, weighted)
-- [ ] Missing data marked as A_VALIDAR (never fabricated — Princípio Zero)
-- [ ] GO/NO-GO Report generated as PDF (Word Online template)
-- [ ] Email report with rich HTML scorecard sent automatically to Architecture team
-- [ ] Teams notification with Adaptive Card summary posted
-- [ ] All results stored in Dataverse for tracking and querying
-- [ ] Copilot Studio Agent answers questions about offers via Teams chat
+- [x] Power Automate captures new emails from Ofertas DN with all attachments
+- [x] Attachments saved to SharePoint in organized folder structure per offer
+- [ ] AI Builder extracts text from PDF, DOCX, XLSX documents (pending: Flow 1→2 integration test)
+- [x] AI Builder Prompt classifies offer type, client, value, deadline, horizontal
+- [x] AI Builder Prompt maps extracted data to RFP Template v2.1 fields
+- [x] AI Builder Prompt catalogs technologies and practices mentioned
+- [x] AI Builder Prompt scores GO/NO-GO across 5 mandatory dimensions (1-5 each, weighted)
+- [x] Missing data marked as A_VALIDAR (never fabricated — Princípio Zero)
+- [ ] GO/NO-GO Report generated as PDF (Word Online template) — Phase 5
+- [ ] Email report with rich HTML scorecard sent automatically to Architecture team — Phase 5
+- [ ] Teams notification with Adaptive Card summary posted — Phase 5
+- [x] All results stored in Dataverse for tracking and querying
+- [ ] Copilot Studio Agent answers questions about offers via Teams chat — Phase 7
 
 ### Out of Scope
 
@@ -79,14 +89,15 @@ Every new offer gets a scored, evidence-backed GO/NO-GO recommendation delivered
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| 100% Power Platform (no Python/Docker) | Corporate policy requires corporate tools only; existing licenses cover all needs | — Pending |
-| AI Builder GPT-4o for extraction/scoring | Available within tenant, no additional cost, adequate quality | — Pending |
-| Power Automate for orchestration (not Logic Apps) | Simpler, included in M365, sufficient for ~5 offers/week volume | — Pending |
-| Dataverse for structured tracking (not SharePoint lists) | Better for relational data, query performance, and Copilot integration | — Pending |
+| 100% Power Platform (no Python/Docker) | Corporate policy requires corporate tools only; existing licenses cover all needs | ✓ Confirmed — all deployed on Power Platform |
+| AI Builder GPT-4.1 for extraction/scoring | Available within tenant (upgraded from GPT-4o to GPT-4.1), no additional cost | ✓ Deployed — 4 prompts active |
+| Power Automate for orchestration (not Logic Apps) | Simpler, included in M365, sufficient for ~5 offers/week volume | ✓ Deployed — 3 flows created |
+| Dataverse for structured tracking (not SharePoint lists) | Better for relational data, query performance, and Copilot integration | ✓ Deployed — rfp_ofertas table active |
 | Human-in-the-loop for final decision | AI recommends but never decides — Director has final authority | ✓ Good |
-| Princípio Zero: A_VALIDAR over fabrication | Critical for trust — users must know which data is real vs missing | ✓ Good |
+| Princípio Zero: A_VALIDAR over fabrication | Critical for trust — users must know which data is real vs missing | ✓ Good — enforced in all 4 prompts |
 | GSD (Get Shit Done) for project governance | Ensures spec-driven development with mandatory quality gates | ✓ Good |
-| 2-agent execution: Opus (arch) + Codex (deploy) | Separation of concerns, browser QA vs automated QA | — Pending |
+| Unified agent execution (Antigravity) | Consolidated from 2-agent model for efficiency; browser + terminal | ✓ Active — single agent handles arch + deploy |
+| Browser automation over PowerShell scripts | Entra ID restrictions block PnP/PAC CLI auth | ✓ Confirmed — all deploy via maker portals |
 
 ## Scoring Framework
 
@@ -120,4 +131,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-05 after initialization*
+*Last updated: 2026-04-05 after Phase 4 documentation update — Phases 1-3 complete, Phase 4 in progress*

@@ -1,62 +1,81 @@
 # Concerns — AI Smart Organizer
 
+> **Last updated:** 2026-04-05 — reflects actual deployment status
+
+## Active Blockers
+
+### BLOCK-01: Child Flow Connector Not Available
+- **Impact:** Flow 2 cannot call Flow 3 as a child flow
+- **Root Cause:** "Executar um fluxo filho" (Run a Child Flow) requires flows to be inside a Dataverse Solution. Our flows are standalone.
+- **Options:**
+  1. Move all 3 flows into a Solution (recommended)
+  2. Change Flow 3 trigger to Dataverse-based (trigger when status = SCORED)
+  3. Use HTTP Request trigger on Flow 3 (requires premium connector)
+- **Priority:** HIGH — blocks end-to-end pipeline completion
+
+### BLOCK-02: Dataverse "Estado" Field Type Mismatch
+- **Impact:** Flow 2 "Atualizar uma linha 1" shows "invalid integer" error for Estado field
+- **Root Cause:** Dataverse Status/State fields are integer-based (optionset), not text
+- **Fix:** Use status reason integer codes instead of text strings (e.g., 1 = Active, 2 = Inactive)
+- **Priority:** MEDIUM — workaround using custom text field "status" column
+
 ## Technical Debt
 
 ### TD-01: Hardcoded Paths and Credentials
 - **Files:** `email_analyzer_pro.py` (line 18-24), `analyze_inbox.mjs` (line 126-127)
 - **Issue:** Workspace paths, email addresses, and user keys are hardcoded
-- **Risk:** Code is not portable; breaks if moved or run by another user
-- **Priority:** Low — these scripts won't be used in production (Power Platform architecture)
+- **Risk:** Low — these scripts are POC, not production code
+- **Priority:** LOW
 
 ### TD-02: Duplicate Implementations
 - **Files:** `analyze_inbox.mjs` and `email_analyzer_pro.py`
-- **Issue:** Two implementations of the same email analysis functionality (Node.js and Python)
-- **Risk:** Confusion about which is canonical
-- **Resolution:** Python version (`email_analyzer_pro.py`) is the canonical analyzer (deeper classification). Node.js version was an earlier attempt with memory issues.
+- **Resolution:** Python version is canonical. Both are POC — production uses AI Builder.
 
 ### TD-03: No Requirements.txt
-- **Issue:** Python dependencies (pandas) not documented in a `requirements.txt`
-- **Risk:** Environment not reproducible
-- **Priority:** Low — Python scripts are exploratory, not production code
+- **Priority:** LOW — Python scripts are not production
 
-### TD-04: No .gitignore
-- **Issue:** `node_modules/`, large CSV files (169MB), and `.planning/` not gitignored
-- **Risk:** Huge repo size if committed. Sensitive data in CSVs.
-- **Priority:** High — must create `.gitignore` before first commit
+### TD-04: No .gitignore — ✅ RESOLVED
+- **Status:** `.gitignore` created and committed. Large CSVs, node_modules excluded.
+
+### TD-05: Deploy Scripts Blocked
+- **Files:** `deploy/01_deploy_sharepoint.ps1`, `deploy/02_deploy_dataverse.ps1`
+- **Issue:** PowerShell scripts require Entra ID app registration (PnP.PowerShell -Interactive/-DeviceLogin)
+- **Resolution:** Browser-based automation used instead. Scripts kept for documentation.
+
+### TD-06: Governance Doc Sprint Status Not Updated
+- **File:** `docs/05_Agentic_Project_Governance.md`
+- **Issue:** All sprint items show "TODO" status — none updated to reflect completed work
+- **Priority:** MEDIUM — needs update during documentation sweep
 
 ## Security Concerns
 
-### SEC-01: Large CSV Files Contain Email Data
-- **Files:** `Inbox.CSV` (169MB), `Usuario_GEN_OFERTAS.CSV` (8.8MB)
-- **Content:** Email bodies, sender addresses, subjects — potentially sensitive corporate data
-- **Risk:** If committed to git, sensitive email content would be in version control
-- **Mitigation:** Add to `.gitignore` immediately. Never commit these files.
+### SEC-01: Large CSV Files Contain Email Data — ✅ MITIGATED
+- **Mitigation:** Added to `.gitignore`. Files not committed to repo.
 
 ### SEC-02: MS Graph Client IDs in POC
-- **File:** `poc_ms_graph.mjs`
-- **Issue:** Multiple well-known public client IDs hardcoded (but these are public/documented by Microsoft)
-- **Risk:** Low — these are public client IDs, not secrets
+- **Risk:** LOW — these are public/documented Microsoft client IDs
 
 ### SEC-03: User Email Hardcoded
-- **File:** `email_analyzer_pro.py` (line 24)
-- **Content:** `USER_EMAIL = "mbenicios@minsait.com"`
-- **Risk:** Low — personal identifier, not a secret
+- **Risk:** LOW — personal identifier in POC file, not a secret
 
 ## Known Issues
 
-### ISS-01: MS Graph Blocked by Corporate Tenant
-- **Impact:** Cannot automate email access via Graph API
-- **Root Cause:** Conditional Access Policies (AADSTS50105 — app not assigned, AADSTS53003 — CA policy blocked)
-- **Resolution:** Pivoted to Power Platform architecture (uses delegated connectors, not Graph directly)
+### ISS-01: MS Graph Blocked by Corporate Tenant — ✅ RESOLVED
+- **Resolution:** Pivoted to Power Platform architecture (uses delegated connectors)
 
-### ISS-02: Inbox CSV Too Large to Load Naively
-- **Impact:** `analyze_inbox.mjs` v1 crashed with OOM
-- **Resolution:** v2 uses streaming parser with Map accumulators (constant memory)
+### ISS-02: Inbox CSV Too Large to Load Naively — ✅ RESOLVED
+- **Resolution:** v2 uses streaming parser. Production uses Outlook connector (no CSV).
+
+### ISS-03: Power Automate New Designer Search Issues
+- **Impact:** Action search in New Designer sometimes fails to find connectors
+- **Workaround:** Switch to Classic Designer for hard-to-find actions
+- **Priority:** LOW — cosmetic, doesn't block functionality
 
 ## Performance
-- `email_analyzer_pro.py` processes ~15,630 emails in ~30 seconds (acceptable for one-time analysis)
-- No performance concerns for production — Power Platform handles its own scaling
+- POC: `email_analyzer_pro.py` processes ~15,630 emails in ~30 seconds
+- Production: Power Platform handles its own scaling. Target: ≤ 30 min per offer E2E.
 
 ## Fragile Areas
-- **CSV parsing:** Multiline fields in Outlook exports require careful quote-aware parsing. Both implementations handle this but differently.
-- **Classification regex:** Sensitive to language (PT-BR/ES/EN mix). New email patterns may not match existing rules.
+- **AI Builder prompts:** Sensitive to input quality. Very long documents may hit token limits.
+- **Dataverse column names:** Internal names (cr8b2_*) must be used in expressions, not display names.
+- **Power Automate dynamic content:** Must use correct "Text" output from AI Builder, not "Resposta do Prompt".

@@ -1,5 +1,5 @@
 # Functional Specification (FS)
-## RFP Auto-Diligence Pipeline — v1.0
+## RFP Auto-Diligence Pipeline — v2.1
 ## 🏢 Arquitetura 100% Microsoft Power Platform / Copilot Studio
 
 | Campo | Valor |

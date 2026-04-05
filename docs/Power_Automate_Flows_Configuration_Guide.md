@@ -156,8 +156,8 @@ The screenshot below shows all 3 RFP flows successfully created in the ColOferta
 
 **Current state:** Trigger → Atualizar uma linha → Executar uma solicitação → Atualizar uma linha 1
 
-> [!WARNING]
-> **MISSING ACTIONS**: This flow needs 3 more AI Builder actions + 1 child flow call. Currently has only 1 AI Builder action (Classify). Need to add: Extract, Tech, GoNoGo, and Run Child Flow.
+> [!NOTE]
+> **CURRENT STATE (2026-04-05):** All 4 AI Builder actions are configured (Classify, Extract, Tech, GoNoGo). Dataverse update action has 4 JSON columns mapped. Only the child flow call to RFP-03 remains **BLOCKED** (requires Dataverse Solution).
 
 ---
 
@@ -219,82 +219,82 @@ The screenshot below shows all 3 RFP flows successfully created in the ColOferta
 
 ---
 
-### 2.4 Action 3: AI_Extract — TO BE ADDED ❌
+### 2.4 Action 3: AI_Extract — ✅ CONFIGURED
 
-Click **"+"** between AI_Classify and Atualizar uma linha 1 → Search: `Executar uma solicitacao` → Select AI Builder
+Added between AI_Classify and Atualizar uma linha 1.
 
-| Field | Value | How to Set |
-|-------|-------|------------|
-| **Prompt** | `RFP_Extract_Fields` | Dropdown → select |
-| **classification_json** | Output of AI_Classify | ⚡ Dynamic → under **"AI_Classify"** (or "Executar uma solicitação") → **"Text"** |
-| **document_text** | 🔵 `email_body_text` | ⚡ Dynamic → trigger → **email_body_text** |
+| Field | Value | Status |
+|-------|-------|--------|
+| **Prompt** | `RFP_Extract_Fields` | ✅ Configured |
+| **classification_json** | Output of AI_Classify ("Texto") | ✅ Dynamic content mapped |
+| **document_text** | 🔵 `email_body_text` | ✅ Dynamic content mapped |
 
-> Rename to: `AI_Extract`
-
----
-
-### 2.5 Action 4: AI_Tech — TO BE ADDED ❌
-
-Click **"+"** below AI_Extract → Same AI Builder action
-
-| Field | Value | How to Set |
-|-------|-------|------------|
-| **Prompt** | `RFP_Tech_Practices` | Dropdown → select |
-| **document_text** | 🔵 `email_body_text` | ⚡ Dynamic → trigger → **email_body_text** |
-
-> Rename to: `AI_Tech`
+> Renamed to: `AI_Extract` ✅
 
 ---
 
-### 2.6 Action 5: AI_GoNoGo — TO BE ADDED ❌
+### 2.5 Action 4: AI_Tech — ✅ CONFIGURED
 
-Click **"+"** below AI_Tech → Same AI Builder action
+Added below AI_Extract.
 
-| Field | Value | How to Set |
-|-------|-------|------------|
-| **Prompt** | `RFP_GoNoGo_Score` | Dropdown → select |
-| **classification_json** | Output of AI_Classify | ⚡ Dynamic → **AI_Classify** → **"Text"** |
-| **extracted_fields_json** | Output of AI_Extract | ⚡ Dynamic → **AI_Extract** → **"Text"** |
-| **tech_catalog_json** | Output of AI_Tech | ⚡ Dynamic → **AI_Tech** → **"Text"** |
-| **document_text** | 🔵 `email_body_text` | ⚡ Dynamic → trigger → **email_body_text** |
+| Field | Value | Status |
+|-------|-------|--------|
+| **Prompt** | `RFP_Tech_Practices` | ✅ Configured |
+| **document_text** | 🔵 `email_body_text` | ✅ Dynamic content mapped |
 
-> Rename to: `AI_GoNoGo`
+> Renamed to: `AI_Tech` ✅
 
 ---
 
-### 2.7 Action 6: Atualizar uma linha 1 — Save Results (Existing, needs edits)
+### 2.6 Action 5: AI_GoNoGo — ✅ CONFIGURED
 
-This action already exists. Current config needs additional fields:
+Added below AI_Tech.
 
-| Field | Value | How to Set |
-|-------|-------|------------|
-| **Nome da tabela** | `RFP Ofertas` | Already configured ✅ |
-| **ID da Linha** | 🔵 `offer_id` | Already configured ✅ |
-| **Status** | `SCORED` | Change from current value to `SCORED` |
-| **Headline** | Output of AI_GoNoGo | ⚡ Dynamic → **AI_GoNoGo** → **"Text"** |
-| **Classification** | Output of AI_Classify | ⚡ Dynamic → **AI_Classify** → **"Text"** |
+| Field | Value | Status |
+|-------|-------|--------|
+| **Prompt** | `RFP_GoNoGo_Score` | ✅ Configured |
+| **classification_json** | Output of AI_Classify ("Texto") | ✅ Dynamic content mapped |
+| **extracted_fields_json** | Output of AI_Extract ("Texto") | ✅ Dynamic content mapped |
+| **tech_catalog_json** | Output of AI_Tech ("Texto") | ✅ Dynamic content mapped |
+| **document_text** | 🔵 `email_body_text` | ✅ Dynamic content mapped |
 
-> [!TIP]
-> Click **"Mostrar tudo"** to see all Dataverse columns including Headline and Classification.
-
----
-
-### 2.8 Action 7: Executar um fluxo filho — TO BE ADDED ❌
-
-Click **"+"** below the last Atualizar → Search: `Executar um fluxo filho` or `Run a Child Flow`
-
-| Field | Value | How to Set |
-|-------|-------|------------|
-| **Fluxo filho** | `RFP-03-Report-Generation` | Dropdown → select |
-| **offer_id** | 🔵 `offer_id` | ⚡ Dynamic → trigger → **offer_id** |
+> Renamed to: `AI_GoNoGo` ✅
 
 ---
 
-### Flow 2 Status: ⚠️ NEEDS 4 MORE ACTIONS
+### 2.7 Action 6: Atualizar uma linha 1 — Save Results ✅ CONFIGURED
 
-**What's done:** Trigger ✅ | Update PROCESSING ✅ | AI_Classify (needs fix) | Update (needs edits)  
-**What's missing:** AI_Extract ❌ | AI_Tech ❌ | AI_GoNoGo ❌ | Child Flow call ❌  
-**Fixes needed:** AdditionalContext in AI_Classify (remove base64, add email_body_text)
+All JSON columns mapped to AI Builder outputs:
+
+| Field | Value | Status |
+|-------|-------|--------|
+| **Nome da tabela** | `RFP Ofertas` | ✅ Configured |
+| **ID da Linha** | 🔵 `offer_id` | ✅ Configured |
+| **Status** | `SCORED` | ✅ Configured |
+| **Classification JSON** | Output of AI_Classify ("Texto") | ✅ Dynamic content mapped |
+| **Extracted Fields JSON** | Output of AI_Extract ("Texto") | ✅ Dynamic content mapped |
+| **Tech Catalog JSON** | Output of AI_Tech ("Texto") | ✅ Dynamic content mapped |
+| **GoNoGo JSON** | Output of AI_GoNoGo ("Texto") | ✅ Dynamic content mapped |
+
+---
+
+### 2.8 Action 7: Executar um fluxo filho — ❌ BLOCKED
+
+> [!CAUTION]
+> **BLOCKED:** The "Executar um fluxo filho" action is NOT available for flows outside a Dataverse Solution. Workaround: Change Flow 3 trigger to Dataverse-based (fires when status = `SCORED`).
+
+| Field | Value | Status |
+|-------|-------|--------|
+| **Fluxo filho** | `RFP-03-Report-Generation` | ❌ BLOCKED |
+| **Workaround** | Dataverse trigger on status change | 🔄 TODO |
+
+---
+
+### Flow 2 Status: ✅ 7/8 ACTIONS CONFIGURED
+
+**What's done:** Trigger ✅ | Update PROCESSING ✅ | AI_Classify ✅ | AI_Extract ✅ | AI_Tech ✅ | AI_GoNoGo ✅ | Update SCORED + 4 JSON columns ✅  
+**What's blocked:** Child Flow call (requires Dataverse Solution)  
+**Workaround:** Convert Flow 3 to Dataverse trigger (when status = SCORED)
 
 ---
 ---
@@ -456,12 +456,12 @@ Click **"+"** → Search: `Executar um fluxo filho`
 ## Flow 2: RFP-02-Processing-Pipeline
 - [x] Trigger: `offer_id` and `email_body_text` inputs
 - [x] Atualizar uma linha: `PROCESSING` status
-- [ ] Fix AI_Classify: Remove base64, add `email_body_text` + `sender_info`
-- [ ] Add AI_Extract: `RFP_Extract_Fields` prompt
-- [ ] Add AI_Tech: `RFP_Tech_Practices` prompt
-- [ ] Add AI_GoNoGo: `RFP_GoNoGo_Score` prompt (4 inputs)
-- [ ] Update Atualizar uma linha 1: Change to `SCORED`, add Headline + Classification
-- [ ] Add Executar fluxo filho: `RFP-03-Report-Generation`
+- [x] AI_Classify: `RFP_01_Classify_Offer` prompt ✅
+- [x] AI_Extract: `RFP_02_Extract_Fields` prompt ✅
+- [x] AI_Tech: `RFP_03_Tech_Practices` prompt ✅
+- [x] AI_GoNoGo: `RFP_04_GoNoGo_Score` prompt ✅
+- [x] Atualizar uma linha 1: `SCORED` + 4 JSON columns ✅
+- [ ] Executar fluxo filho: ❌ BLOCKED (requires Solution)
 
 ## Flow 1: RFP-01-Email-Intake
 - [ ] Set Caixa de Correio Original: `ofertasdn@indracompany.com`

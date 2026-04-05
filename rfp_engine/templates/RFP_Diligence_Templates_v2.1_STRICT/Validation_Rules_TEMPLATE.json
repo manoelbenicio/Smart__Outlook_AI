@@ -1,0 +1,26 @@
+{
+  "version": "v2.1",
+  "principle_zero": "Never drop data. Always store raw extracts + evidence + status (PRESENT/A_VALIDAR/NOT_APPLICABLE).",
+  "field_states": [
+    "PRESENT",
+    "A_VALIDAR",
+    "NOT_APPLICABLE"
+  ],
+  "gates": {
+    "G1_reading_report": {
+      "must_exist": true,
+      "allow_failed": true,
+      "failed_requires_explanation": true
+    },
+    "G2_evidence_for_facts": {
+      "facts_require_evidence": true,
+      "evidence_must_include_ref": true
+    },
+    "G3_rtm_for_must": {
+      "must_requirements_need_rtm": true
+    },
+    "G4_p0_missing_action": {
+      "if_p0_missing": "create_qa_and_customer_question"
+    }
+  }
+}

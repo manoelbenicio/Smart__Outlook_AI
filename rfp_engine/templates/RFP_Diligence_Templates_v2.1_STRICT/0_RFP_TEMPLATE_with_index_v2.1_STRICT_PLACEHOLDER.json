@@ -1,0 +1,444 @@
+{
+  "schema_version": "v2.1-strict",
+  "generated_at": "<AUTO_UTC_ISO8601>",
+  "rfp_meta": {
+    "client": "<CLIENT_NAME>",
+    "rfp_id": "<RFP_ID>",
+    "version": "<RFP_VERSION>",
+    "offer_type": "<LI|SOC|NOC|CLOUD|APPS|OUTSOURCING|OTHER>",
+    "languages": [
+      "<LANG_1>"
+    ],
+    "dates": {
+      "received": "<YYYY-MM-DD>",
+      "qa_internal": "<YYYY-MM-DD>",
+      "submission": "<YYYY-MM-DD|TBD>",
+      "presentation": "<YYYY-MM-DD|TBD>",
+      "bafo": "<YYYY-MM-DD|TBD>"
+    },
+    "change_log": [
+      {
+        "date": "<YYYY-MM-DD>",
+        "who": "<NAME>",
+        "change": "<CHANGE_DESCRIPTION>"
+      }
+    ]
+  },
+  "executive_summary": {
+    "context": "<ONE_PARAGRAPH_CONTEXT>",
+    "objectives": [
+      "<OBJECTIVE_1>"
+    ],
+    "value_proposition": [
+      "<VP_1>"
+    ],
+    "key_constraints": [
+      "<CONSTRAINT_1>"
+    ],
+    "recommendation": {
+      "status": "<GO|GO_CONDITIONAL|NO_GO>",
+      "headline": "<ONE_SENTENCE_RATIONALE>",
+      "confidence_0_1": "<0-1>"
+    }
+  },
+  "service_catalog": {
+    "in_scope": [
+      "<IN_SCOPE_1>"
+    ],
+    "out_of_scope": [
+      "<OUT_SCOPE_1>"
+    ],
+    "dependencies": [
+      "<DEPENDENCY_1>"
+    ],
+    "assumptions": [
+      "<ASSUMPTION_1>"
+    ]
+  },
+  "requirements": {
+    "functional": [
+      {
+        "req_id": "RF-001",
+        "title": "<REQ_TITLE>",
+        "description": "<REQ_DESCRIPTION>",
+        "priority": "<MUST|SHOULD|COULD>",
+        "field_status": "<PRESENT|A_VALIDAR|NOT_APPLICABLE>",
+        "criticality": "<P0|P1|P2>",
+        "practice_owner": "<PRACTICE>",
+        "evidence": [
+          {
+            "doc": "<DOC>",
+            "ref": "<PAGE|LINE|CELL>"
+          }
+        ]
+      }
+    ],
+    "non_functional": [
+      {
+        "req_id": "NFR-001",
+        "title": "<NFR_TITLE>",
+        "description": "<NFR_DESCRIPTION>",
+        "category": "<SLA|SECURITY|PERFORMANCE|OBSERVABILITY|COMPLIANCE|OTHERS>",
+        "target": "<TARGET_VALUE|TBD>",
+        "field_status": "<PRESENT|A_VALIDAR|NOT_APPLICABLE>",
+        "criticality": "<P0|P1|P2>",
+        "practice_owner": "<PRACTICE>",
+        "evidence": [
+          {
+            "doc": "<DOC>",
+            "ref": "<PAGE|LINE|CELL>"
+          }
+        ]
+      }
+    ],
+    "compliance": [
+      {
+        "req_id": "COMP-001",
+        "framework": "<ISO27001|LGPD|ETSI|3GPP|OTHERS>",
+        "control_or_clause": "<CONTROL/CLAUSE>",
+        "requirement": "<COMPLIANCE_REQUIREMENT>",
+        "field_status": "<PRESENT|A_VALIDAR|NOT_APPLICABLE>",
+        "criticality": "<P0|P1|P2>",
+        "practice_owner": "<PRACTICE>",
+        "evidence": [
+          {
+            "doc": "<DOC>",
+            "ref": "<PAGE|LINE|CELL>"
+          }
+        ]
+      }
+    ]
+  },
+  "workload": {
+    "tickets_year": "<INT_OR_TBD>",
+    "by_service_class": [
+      {
+        "class": "<CLASS>",
+        "percent": "<0-100%>"
+      }
+    ],
+    "by_technology": [
+      {
+        "technology": "<TECH>",
+        "percent": "<0-100%>"
+      }
+    ],
+    "by_complexity": [
+      {
+        "level": "<LOW|MEDIUM|HIGH>",
+        "percent": "<0-100%>"
+      }
+    ],
+    "priority_rule": "<TEXT_RULE|TBD>",
+    "field_status": "<PRESENT|A_VALIDAR|NOT_APPLICABLE>",
+    "criticality": "<P0|P1|P2>",
+    "practice_owner": "<PRACTICE>",
+    "evidence": [
+      {
+        "doc": "<DOC>",
+        "ref": "<PAGE|LINE|CELL>"
+      }
+    ]
+  },
+  "slas": {
+    "coverage_window": "<24x7|8x5|CUSTOM|TBD>",
+    "mtta": [
+      {
+        "severity": "<C1..C4>",
+        "minutes": "<INT_OR_TBD>"
+      }
+    ],
+    "mttr": [
+      {
+        "severity": "<C1..C4>",
+        "minutes": "<INT_OR_TBD>"
+      }
+    ],
+    "penalties": "<TEXT_OR_TABLE_REF|TBD>",
+    "field_status": "<PRESENT|A_VALIDAR|NOT_APPLICABLE>",
+    "criticality": "<P0|P1|P2>",
+    "practice_owner": "<PRACTICE>",
+    "evidence": [
+      {
+        "doc": "<DOC>",
+        "ref": "<PAGE|LINE|CELL>"
+      }
+    ]
+  },
+  "solution_architecture": {
+    "high_level": "<TEXT>",
+    "environments": [
+      "DEV",
+      "TEST",
+      "HML",
+      "PRD"
+    ],
+    "integrations": [
+      {
+        "system": "<SYSTEM>",
+        "interface": "<API/PROTOCOL>",
+        "direction": "<IN/OUT/BIDIR>"
+      }
+    ],
+    "observability": {
+      "logging": [
+        "<SYSLOG|SIEM|OTHERS>"
+      ],
+      "metrics": [
+        "<PROMETHEUS|OPENCONFIG|OTHERS>"
+      ],
+      "tracing": [
+        "<OTEL|OTHERS>"
+      ]
+    },
+    "cicd": {
+      "tools": [
+        "<TOOL_1>"
+      ],
+      "notes": "<TEXT>"
+    },
+    "field_status": "<PRESENT|A_VALIDAR|NOT_APPLICABLE>",
+    "criticality": "<P0|P1|P2>",
+    "practice_owner": "<PRACTICE>",
+    "evidence": [
+      {
+        "doc": "<DOC>",
+        "ref": "<PAGE|LINE|CELL>"
+      }
+    ]
+  },
+  "security_compliance": {
+    "isms": {
+      "standard": "<ISO27001:2022|TBD>",
+      "soa_required": "<YES|NO|TBD>",
+      "notes": "<TEXT>"
+    },
+    "data_protection": {
+      "law": "<LGPD|GDPR|TBD>",
+      "dpa_required": "<YES|NO|TBD>",
+      "notes": "<TEXT>"
+    },
+    "iam": {
+      "methods": [
+        "<LDAP|TACACS|OAUTH|MFA>"
+      ],
+      "notes": "<TEXT>"
+    },
+    "hardening": {
+      "baseline": "<CIS|NIST|CUSTOM|TBD>",
+      "notes": "<TEXT>"
+    },
+    "vuln_mgmt": {
+      "sla_remediation": "<TEXT|TBD>",
+      "tools": [
+        "<TOOL_1>"
+      ]
+    },
+    "dr_backup": {
+      "rpo": "<TIME|TBD>",
+      "rto": "<TIME|TBD>"
+    },
+    "field_status": "<PRESENT|A_VALIDAR|NOT_APPLICABLE>",
+    "criticality": "<P0|P1|P2>",
+    "practice_owner": "<PRACTICE>",
+    "evidence": [
+      {
+        "doc": "<DOC>",
+        "ref": "<PAGE|LINE|CELL>"
+      }
+    ]
+  },
+  "service_management": {
+    "frameworks": [
+      "<ITIL4|ISO20000|CUSTOM|TBD>"
+    ],
+    "processes": [
+      "Incident",
+      "Request",
+      "Change",
+      "Problem"
+    ],
+    "follow_the_sun": "<YES|NO|TBD>",
+    "squads": "<YES|NO|TBD>",
+    "runbooks_required": "<YES|NO|TBD>",
+    "field_status": "<PRESENT|A_VALIDAR|NOT_APPLICABLE>",
+    "criticality": "<P0|P1|P2>",
+    "practice_owner": "<PRACTICE>",
+    "evidence": [
+      {
+        "doc": "<DOC>",
+        "ref": "<PAGE|LINE|CELL>"
+      }
+    ]
+  },
+  "staffing_dimensioning": {
+    "coverage": "<24x7|8x5|CUSTOM|TBD>",
+    "roles": [
+      {
+        "role": "<L1|L2|L3|ARCH|PM|SEC>",
+        "fte": "<INT_OR_TBD>",
+        "shift": "<SHIFT_PATTERN|TBD>"
+      }
+    ],
+    "assumptions": {
+      "shrinkage": "<%|TBD>",
+      "occupancy": "<%|TBD>",
+      "aht_minutes": "<INT_OR_TBD>"
+    },
+    "field_status": "<PRESENT|A_VALIDAR|NOT_APPLICABLE>",
+    "criticality": "<P0|P1|P2>",
+    "practice_owner": "<PRACTICE>",
+    "evidence": [
+      {
+        "doc": "<DOC>",
+        "ref": "<PAGE|LINE|CELL>"
+      }
+    ]
+  },
+  "commercials": {
+    "model": "<FIXED|T&M|HYBRID|TBD>",
+    "rate_card": [
+      {
+        "role": "<ROLE>",
+        "unit": "<HOUR|MONTH>",
+        "price": "<CURRENCY_OR_TBD>"
+      }
+    ],
+    "price_adjustments": "<INDEXATION/REAJUSTE|TBD>",
+    "billing_rules": "<TEXT|TBD>",
+    "field_status": "<PRESENT|A_VALIDAR|NOT_APPLICABLE>",
+    "criticality": "<P0|P1|P2>",
+    "practice_owner": "<PRACTICE>",
+    "evidence": [
+      {
+        "doc": "<DOC>",
+        "ref": "<PAGE|LINE|CELL>"
+      }
+    ]
+  },
+  "technology_catalog": [
+    {
+      "tech_id": "T-001",
+      "category": "<LI_PLATFORM|NETWORK|OBSERVABILITY|SECURITY|CLOUD|OTHER>",
+      "technology": "<TECHNOLOGY>",
+      "product": "<PRODUCT_NAME|TBD>",
+      "vendor_org": "<VENDOR/ORG|TBD>",
+      "role_in_solution": "<ROLE>",
+      "mandatory": "<YES|NO|TBD>",
+      "field_status": "<PRESENT|A_VALIDAR|NOT_APPLICABLE>",
+      "criticality": "<P0|P1|P2>",
+      "practice_owner": "<PRACTICE>",
+      "evidence": [
+        {
+          "doc": "<DOC>",
+          "ref": "<PAGE|LINE|CELL>"
+        }
+      ]
+    }
+  ],
+  "practices_catalog": [
+    {
+      "practice_id": "P-001",
+      "practice": "<PRACTICE/TOWER>",
+      "why_needed": "<ONE_SENTENCE>",
+      "related_technologies": [
+        "<TECH_1>"
+      ],
+      "key_deliverables": [
+        "<DELIV_1>"
+      ]
+    }
+  ],
+  "go_no_go": {
+    "recommendation": "<GO|GO_CONDITIONAL|NO_GO>",
+    "recommendation_rationale": "<TEXT>",
+    "decision_authority": [
+      "Diretoria_Prática",
+      "Diretoria_Mercado"
+    ],
+    "decision_status": "<PENDING|APPROVED|REJECTED>",
+    "approvers": [
+      {
+        "name": "<NAME>",
+        "role": "<ROLE>",
+        "status": "<PENDING|APPROVED|REJECTED>",
+        "date": "<YYYY-MM-DD|TBD>"
+      }
+    ],
+    "scorecard": [
+      {
+        "dimension": "<DIMENSION>",
+        "weight_percent": "<0-100>",
+        "score_1_5": "<1-5>",
+        "rationale": "<TEXT>",
+        "evidence": [
+          {
+            "doc": "<DOC>",
+            "ref": "<REF>"
+          }
+        ]
+      }
+    ],
+    "blockers_p0": [
+      {
+        "blocker": "<BLOCKER>",
+        "what_is_missing": "<TEXT>",
+        "owner": "<ROLE>",
+        "due_date": "<YYYY-MM-DD|TBD>"
+      }
+    ],
+    "actions_next_48h": [
+      "<ACTION_1>"
+    ]
+  },
+  "compliance_checks": {
+    "requirement_fit_matrix": [
+      {
+        "req_id": "<REQ_ID>",
+        "fit": "<FIT|PARTIAL|GAP>",
+        "notes": "<TEXT>",
+        "evidence": [
+          {
+            "doc": "<DOC>",
+            "ref": "<REF>"
+          }
+        ]
+      }
+    ],
+    "attachments": [
+      {
+        "name": "<FILE>",
+        "type": "<PDF|DOCX|XLSX|CSV>",
+        "status": "<READ_OK|OCR_OK|FAILED>",
+        "notes": "<TEXT>"
+      }
+    ],
+    "qa_log": [
+      {
+        "qid": "Q-001",
+        "severity": "<P0|P1|P2>",
+        "question": "<TEXT>",
+        "impact": "<TEXT>",
+        "status": "<OPEN|SENT|ANSWERED>"
+      }
+    ],
+    "customer_questions_pack": [
+      {
+        "qid": "Q-001",
+        "priority": "<P0|P1|P2>",
+        "category": "<CATEGORY>",
+        "question": "<TEXT>",
+        "impact": "<TEXT>"
+      }
+    ]
+  },
+  "source_index": {
+    "<FIELD_PATH>": [
+      {
+        "doc": "<DOC_NAME>",
+        "ref": "<PAGE|LINE|CELL>",
+        "excerpt": "<OPTIONAL_SHORT_EXCERPT>"
+      }
+    ]
+  }
+}

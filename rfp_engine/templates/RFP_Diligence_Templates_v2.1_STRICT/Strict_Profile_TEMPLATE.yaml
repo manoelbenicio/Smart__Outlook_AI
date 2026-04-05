@@ -1,0 +1,30 @@
+# Strict Profile Template (v2.1)
+offer_type: <LI|SOC|NOC|CLOUD|APPS|OUTSOURCING|OTHER>
+decision_authority:
+  - Diretoria_Prática
+  - Diretoria_Mercado
+
+# P0 são gates de decisão (não campos obrigatórios universais).
+p0_topics:
+  - evidence_and_source_index
+  - reading_report
+  - rtm_for_must
+  - go_no_go_scorecard
+  # opcionais por perfil:
+  - workload
+  - slas
+  - commercials
+  - integrations
+  - security_compliance
+
+missing_data_policy:
+  required_action: "Mark as A_VALIDAR and create QA Log + Customer Question"
+  allow_not_applicable: true
+  not_applicable_requires_reason: true
+
+rules:
+  - name: "Managed services requires SLA"
+    if:
+      service_catalog_in_scope_contains: "Managed Services"
+    then:
+      require_topic: "slas"

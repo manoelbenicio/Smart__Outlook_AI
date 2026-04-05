@@ -175,21 +175,31 @@ Deferred to future release. Tracked but not in current roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| OPUS-01..05 | TBD | Pending |
-| OPUS-06..10 | TBD | Pending |
-| OPUS-11..21 | TBD | Pending |
-| OPUS-22..25 | TBD | Pending |
-| CODEX-01..07 | TBD | Pending |
-| CODEX-08..12 | TBD | Pending |
-| CODEX-13..27 | TBD | Pending |
-| CODEX-28..31 | TBD | Pending |
-| CODEX-32..35 | TBD | Pending |
+| OPUS-01..03 | Phase 1: Infrastructure Setup | Pending |
+| OPUS-04..05 | Phase 4: Flow Development | Pending |
+| OPUS-06..10 | Phase 2: AI Prompt Engineering | Pending |
+| OPUS-11..12 | Phase 1: Infrastructure Setup | Pending |
+| OPUS-13 | Phase 3: AI Prompt Deployment | Pending |
+| OPUS-14..16 | Phase 5: Flow QA & Integration | Pending |
+| OPUS-17 | Phase 7: Copilot Studio Agent | Pending |
+| OPUS-18..21 | Phase 6: E2E Testing & Accuracy | Pending |
+| OPUS-22 | Phase 1: Infrastructure Setup | Pending |
+| OPUS-23 | Phase 5: Flow QA & Integration | Pending |
+| OPUS-24 | Phase 6: E2E Testing & Accuracy | Pending |
+| OPUS-25 | Phase 7: Copilot Studio Agent | Pending |
+| CODEX-01..07 | Phase 1: Infrastructure Setup | Pending |
+| CODEX-08..12 | Phase 3: AI Prompt Deployment | Pending |
+| CODEX-13..27 | Phase 4: Flow Development | Pending |
+| CODEX-28..31 | Phase 7: Copilot Studio Agent | Pending |
+| CODEX-32..34 | Phase 6: E2E Testing & Accuracy | Pending |
+| CODEX-35 | Phase 5: Flow QA & Integration | Pending |
 
 **Coverage:**
 - OPUS requirements: 25 total
 - CODEX requirements: 35 total
 - Total v1: 60 requirements
-- Mapped to phases: 0 (TBD — roadmap next)
+- Mapped to phases: 60 ✓
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-04-05*

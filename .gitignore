@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Large data files (sensitive corporate email data)
+*.CSV
+*.csv
+email_analysis.json
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/

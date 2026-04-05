@@ -4,9 +4,9 @@
 
 | Campo | Valor |
 |---|---|
-| **Ref. SAD** | `01_SAD_Solution_Architecture_Document.md` v2.0 |
-| **Ref. TDD** | `02_TDD_Technical_Design_Document.md` v2.0 |
-| **Status** | ⏳ PENDING APPROVAL |
+| **Ref. SAD** | `01_SAD_Solution_Architecture_Document.md` v2.1 |
+| **Ref. TDD** | `02_TDD_Technical_Design_Document.md` v2.1 |
+| **Status** | ✅ UPDATED |
 | **Audiência** | Administradores Power Platform, operadores do sistema |
 | **Data** | 2026-04-05 |
 | **Supersedes** | Ops Manual v1.0 (descartado — era Python/Docker) |
@@ -79,15 +79,20 @@
 
 ```
 1. Acessar: https://make.powerapps.com → AI Builder → Prompts
-2. + Create a prompt
+2. + Criar sua própria solicitação
 3. Para cada prompt (4 total):
    a. Nome: conforme TDD Seção 4 (RFP_Classify_Offer, etc.)
-   b. Colar System Prompt do SAD Seção 5
-   c. Definir Input: raw_extract_text (ou filled_json)
-   d. Model: GPT-4o
-   e. Temperature: 0.1 (classify/extract) ou 0.2 (score)
-   f. Testar com sample text de uma oferta real
-   g. Salvar e publicar
+   b. Colar instrução do SAD Seção 5
+   c. Definir Inputs conforme documentação
+   d. Model: GPT-4.1
+   e. Testar com sample text de uma oferta real
+   f. Salvar e publicar
+
+✅ STATUS: 4/4 prompts deployados em ColOfertasBrasilPro (2026-04-05)
+   - RFP_Classify_Offer (GPT-4.1, 2 inputs)
+   - RFP_Extract_Fields (GPT-4.1, 2 inputs)
+   - RFP_Tech_Practices (GPT-4.1, 1 input)
+   - RFP_GoNoGo_Score (GPT-4.1, 4 inputs)
 ```
 
 ### 2.4 Criar Power Automate Flows (60 min)
@@ -273,7 +278,7 @@ Documentar mudança → Aprovar → Publicar em PROD
 
 | Documento | Status |
 |---|---|
-| SAD v2.0 | ⏳ PENDING |
-| TDD v2.0 | ⏳ PENDING |
-| **Ops Manual v2.0** | **⏳ PENDING** |
-| Functional Spec v1.0 | ⏳ PENDING |
+| SAD v2.1 | ✅ IN DEPLOYMENT |
+| TDD v2.1 | ✅ IN DEPLOYMENT |
+| **Ops Manual v2.0** | **✅ UPDATED** |
+| Functional Spec v1.0 | ✅ UPDATED |

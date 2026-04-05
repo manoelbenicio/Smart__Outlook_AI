@@ -1,14 +1,13 @@
 # Technical Design Document (TDD)
-## RFP Auto-Diligence Pipeline — v2.0
+## RFP Auto-Diligence Pipeline — v2.1
 ## 🏢 Arquitetura 100% Microsoft Power Platform / Copilot Studio
 
 | Campo | Valor |
 |---|---|
-| **Ref. SAD** | `01_SAD_Solution_Architecture_Document.md` v2.0 |
-| **Versão** | 2.0 |
-| **Status** | ⏳ PENDING APPROVAL |
+| **Ref. SAD** | `01_SAD_Solution_Architecture_Document.md` v2.1 |
+| **Versão** | 2.1 |
+| **Status** | ✅ IN DEPLOYMENT |
 | **Data** | 2026-04-05 |
-| **Supersedes** | TDD v1.0 (descartado — usava Python) |
 
 ---
 
@@ -147,11 +146,11 @@
 | Propriedade | Valor |
 |---|---|
 | **Nome** | RFP_Classify_Offer |
-| **Model** | GPT-4o (Azure OpenAI — tenant corp) |
-| **Input** | `raw_extract_text` (Text, max 100K chars) |
+| **Model** | GPT-4.1 (Azure OpenAI — tenant corp) |
+| **Inputs** | `email_body` (Texto), `sender_info` (Texto) |
 | **Output** | Structured JSON |
 | **Temperature** | 0.1 (máxima precisão) |
-| **Max tokens** | 2000 |
+| **Status** | ✅ DEPLOYED — ColOfertasBrasilPro |
 
 **System Prompt:** Conforme seção 5.1 do SAD v2.0
 
@@ -165,11 +164,10 @@
 | Propriedade | Valor |
 |---|---|
 | **Nome** | RFP_Extract_Fields |
-| **Model** | GPT-4o |
-| **Input** | `raw_extract_text` + `template_schema` |
-| **Output** | Structured JSON (matching v2.1 schema) |
-| **Temperature** | 0.1 |
-| **Max tokens** | 8000 |
+| **Model** | GPT-4.1 |
+| **Inputs** | `classification_json` (Texto), `document_text` (Texto) |
+| **Output** | Structured JSON (5 seções: rfp_meta, scope, delivery, commercial, legal) |
+| **Status** | ✅ DEPLOYED — ColOfertasBrasilPro |
 
 **System Prompt:** 
 ```
@@ -186,23 +184,21 @@ Para cada PRESENT: inclua excerpt do texto como evidência.
 
 | Propriedade | Valor |
 |---|---|
-| **Nome** | RFP_Tech_Practices_Catalog |
-| **Model** | GPT-4o |
-| **Input** | `raw_extract_text` |
-| **Output** | JSON com arrays: technologies[], practices[] |
-| **Temperature** | 0.2 |
-| **Max tokens** | 3000 |
+| **Nome** | RFP_Tech_Practices |
+| **Model** | GPT-4.1 |
+| **Inputs** | `document_text` (Texto) |
+| **Output** | JSON com technologies, methodologies, certifications, minsait_capability_match |
+| **Status** | ✅ DEPLOYED — ColOfertasBrasilPro |
 
 ### 4.4 Prompt: `GoNoGo_Score`
 
 | Propriedade | Valor |
 |---|---|
 | **Nome** | RFP_GoNoGo_Score |
-| **Model** | GPT-4o |
-| **Input** | `filled_json` (output do Prompt 2) |
-| **Output** | JSON com scorecard, recommendation, blockers |
-| **Temperature** | 0.2 |
-| **Max tokens** | 4000 |
+| **Model** | GPT-4.1 |
+| **Inputs** | `classification_json`, `extracted_fields_json`, `tech_catalog_json`, `document_text` (todos Texto) |
+| **Output** | JSON com dimensions, weighted_total, recommendation, key_risks |
+| **Status** | ✅ DEPLOYED — ColOfertasBrasilPro |
 
 **System Prompt:** Conforme seção 5.2 do SAD v2.0
 
@@ -484,7 +480,7 @@ Para cada PRESENT: inclua excerpt do texto como evidência.
 
 | Documento | Status |
 |---|---|
-| SAD v2.0 | ⏳ PENDING |
-| **TDD v2.0** | **⏳ PENDING** |
-| Operations Manual v2.0 | ⏳ PENDING |
-| Functional Spec v1.0 | ⏳ PENDING |
+| SAD v2.1 | ✅ IN DEPLOYMENT |
+| **TDD v2.1** | **✅ IN DEPLOYMENT** |
+| Operations Manual v2.0 | ✅ UPDATED |
+| Functional Spec v1.0 | ✅ UPDATED |

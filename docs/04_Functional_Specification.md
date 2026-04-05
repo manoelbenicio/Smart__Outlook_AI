@@ -4,9 +4,9 @@
 
 | Campo | Valor |
 |---|---|
-| **Ref. SAD** | `01_SAD_Solution_Architecture_Document.md` v2.0 |
-| **Ref. TDD** | `02_TDD_Technical_Design_Document.md` v2.0 |
-| **Status** | ⏳ PENDING APPROVAL |
+| **Ref. SAD** | `01_SAD_Solution_Architecture_Document.md` v2.1 |
+| **Ref. TDD** | `02_TDD_Technical_Design_Document.md` v2.1 |
+| **Status** | ✅ UPDATED |
 | **Audiência** | Stakeholders de negócio, equipe de pré-vendas |
 | **Data** | 2026-04-05 |
 
@@ -106,7 +106,7 @@ O sistema faz automaticamente em 10-30 minutos:
 |---|---|
 | **Input** | Texto extraído |
 | **O que classifica** | Cliente, tipo, valor, prazo, escopo, horizontal |
-| **Tecnologia** | AI Builder Prompt GPT-4o |
+| **Tecnologia** | AI Builder Prompt GPT-4.1 |
 | **Regra de ouro** | Se dado não encontrado → marcado `A_VALIDAR` (nunca inventa) |
 | **Output** | JSON com metadados da oferta |
 | **Quanto tempo** | 1-3 minutos |
@@ -249,7 +249,7 @@ O sistema faz automaticamente em 10-30 minutos:
 
 | Documento | Status |
 |---|---|
-| SAD v2.0 | ⏳ PENDING |
-| TDD v2.0 | ⏳ PENDING |
-| Ops Manual v2.0 | ⏳ PENDING |
-| **Functional Spec v1.0** | **⏳ PENDING** |
+| SAD v2.1 | ✅ IN DEPLOYMENT |
+| TDD v2.1 | ✅ IN DEPLOYMENT |
+| Ops Manual v2.0 | ✅ UPDATED |
+| **Functional Spec v1.0** | **✅ UPDATED** |

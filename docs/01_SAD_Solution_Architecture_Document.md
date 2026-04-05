@@ -1,12 +1,12 @@
 # Solution Architecture Document (SAD)
-## RFP Auto-Diligence Pipeline — v2.0
+## RFP Auto-Diligence Pipeline — v2.1
 ## 🏢 Arquitetura 100% Microsoft Power Platform / Copilot Studio
 
 | Campo | Valor |
 |---|---|
 | **Projeto** | AI Smart Organizer — RFP Auto-Diligence |
-| **Versão** | 2.0 DRAFT |
-| **Status** | ⏳ PENDING APPROVAL |
+| **Versão** | 2.1 |
+| **Status** | ✅ IN DEPLOYMENT |
 | **Autor** | Antigravity AI + Manoel Benicio |
 | **Data** | 2026-04-05 |
 | **Aprovador** | Manoel Benicio (Arquiteto/Líder de Prática) |
@@ -55,7 +55,7 @@ O time de Arquitetos e Pré-Vendas recebe ofertas/RFPs via caixa compartilhada
 |---|---|---|---|---|
 | C1 | **Copilot Studio Agent** | Microsoft Copilot Studio | ✅ Já licenciado | Cérebro: orquestração, IA generativa, classificação, scoring |
 | C2 | **Power Automate Cloud Flow** | Power Automate | ✅ Incluso M365 | Braços: trigger de email, salvar anexos, chamar AI, enviar report |
-| C3 | **AI Builder — Prompt Builder** | AI Builder (Power Platform) | ✅ Incluso Copilot Studio | IA: prompts GPT-4o para extração/classificação de documentos |
+| C3 | **AI Builder — Prompt Builder** | AI Builder (Power Platform) | ✅ Incluso Copilot Studio | IA: prompts GPT-4.1 para extração/classificação de documentos |
 | C4 | **AI Builder — Document Processing** | AI Builder (Power Platform) | ✅ Incluso Copilot Studio | Extração estruturada de PDFs/DOCX/XLSX |
 | C5 | **SharePoint Online** | SharePoint | ✅ Já licenciado | Repositório: armazenamento de ofertas + artefatos gerados |
 | C6 | **Dataverse** | Dataverse | ✅ Incluso Copilot Studio | Banco de dados: tracking de ofertas, scorecard, status |
@@ -127,7 +127,7 @@ O time de Arquitetos e Pré-Vendas recebe ofertas/RFPs via caixa compartilhada
 │  ┌───────────────────────────────────────────────────────────┐  │
 │  │  🧠 LAYER 3: AI CLASSIFICATION + FIELD MAPPING            │  │
 │  │                                                            │  │
-│  │  AI Builder — Prompt Builder (GPT-4o)                      │  │
+│  │  AI Builder — Prompt Builder (GPT-4.1)                     │  │
 │  │  ┌──────────────────────────────────────────────────┐     │  │
 │  │  │ PROMPT 1: "Classify Offer"                        │     │  │
 │  │  │  Input: raw_extract.txt                           │     │  │
@@ -219,68 +219,85 @@ O time de Arquitetos e Pré-Vendas recebe ofertas/RFPs via caixa compartilhada
 
 ---
 
-## 5. AI Builder — Prompts Detalhados
+## 5. AI Builder — Prompts Deployados
 
-### 5.1 Prompt 1: Classify Offer
+> **Status:** Todos os 4 prompts deployados e publicados no ambiente **ColOfertasBrasilPro**
+> em 2026-04-05. Modelo: **GPT-4.1** (Azure OpenAI via tenant corporativo).
 
+### 5.1 Prompt 1: RFP_Classify_Offer ✅ DEPLOYED
+
+| Propriedade | Valor |
+|---|---|
+| **Ambiente** | ColOfertasBrasilPro |
+| **Modelo** | GPT-4.1 |
+| **Temperature** | 0.1 |
+| **Inputs** | `email_body` (Texto), `sender_info` (Texto) |
+
+**Instrução:**
 ```
-Você é um analista de pré-vendas da Minsait (Indra Group).
-Analise o texto abaixo de uma oferta/RFP e extraia os dados em JSON.
-
-REGRAS:
-- Se o dado NÃO está explícito no texto, use "A_VALIDAR"
-- NUNCA invente dados
-- Idiomas: PT-BR, ES, EN
-
-Texto da oferta:
-{{raw_extract_text}}
-
-Retorne SOMENTE JSON válido:
-{
-  "client": "...",
-  "rfp_id": "...",
-  "offer_code": "...",
-  "offer_type": "LI|SOC|NOC|CLOUD|APPS|OUTSOURCING|OTHER",
-  "submission_deadline": "YYYY-MM-DD ou A_VALIDAR",
-  "estimated_value": "R$ xxx ou A_VALIDAR",
-  "scope_summary": "1 parágrafo máximo",
-  "horizontal": "DS|SGE|AM|BPO|ITO|DIC|DATA|OTHER",
-  "contact_name": "...",
-  "contract_duration": "... meses ou A_VALIDAR",
-  "execution_location": "Remoto|Presencial|Híbrido|A_VALIDAR"
-}
+You are an email classification agent for Minsait (Indra Group).
+Classify incoming emails from the Ofertas DN shared mailbox.
+Analyze the email body and sender to determine if it is a genuine
+RFP/offer or administrative noise. Return ONLY valid JSON.
+Categories: RFP_PUBLICA, RFP_PRIVADA, PEDIDO_COTACAO, ADITIVO,
+INFORMATIVO, SPAM_INTERNO, OUTROS.
+Principio Zero: If uncertain, use A_VALIDAR.
 ```
 
-### 5.2 Prompt 4: GO/NO-GO Scoring
+### 5.2 Prompt 2: RFP_Extract_Fields ✅ DEPLOYED
 
+| Propriedade | Valor |
+|---|---|
+| **Ambiente** | ColOfertasBrasilPro |
+| **Modelo** | GPT-4.1 |
+| **Inputs** | `classification_json` (Texto), `document_text` (Texto) |
+
+**Instrução:**
 ```
-Você é um diretor de prática da Minsait avaliando se deve
-perseguir uma oferta/RFP. Analise os dados e pontue de 1-5.
+You are a document extraction agent for Minsait (Indra Group).
+Extract structured data from RFP documents into 5 sections:
+rfp_meta, scope, delivery, commercial, legal.
+RULES: Return ONLY valid JSON. If a field cannot be found,
+set value to A_VALIDAR. NEVER fabricate data.
+Process documents in PT-BR, ES, EN.
+Normalize dates to YYYY-MM-DD. Count total A_VALIDAR fields.
+```
 
-Dados da oferta:
-{{filled_json}}
+### 5.3 Prompt 3: RFP_Tech_Practices ✅ DEPLOYED
 
-Pontue cada dimensão (1=muito ruim, 5=excelente):
+| Propriedade | Valor |
+|---|---|
+| **Ambiente** | ColOfertasBrasilPro |
+| **Modelo** | GPT-4.1 |
+| **Inputs** | `document_text` (Texto) |
 
-1. Alinhamento Estratégico (peso 25%): A oferta está 
-   alinhada com as práticas e capacidades da Minsait?
-2. Viabilidade Técnica (peso 20%): Temos competência e 
-   equipe disponível para executar?
-3. Margem Estimada (peso 20%): O valor justifica o esforço?
-   (considere rate card médio R$ 180/hora)
-4. Prazo vs Capacidade (peso 15%): O cronograma é factível?
-5. Risco Contratual (peso 20%): Há cláusulas problemáticas 
-   ou condições inaceitáveis?
+**Instrução:**
+```
+You are a technology analysis agent for Minsait (Indra Group).
+Scan RFP documents to identify ALL technologies, tools,
+methodologies, certifications, and practices.
+Separate REQUIRED from PREFERRED. Do NOT invent technologies.
+Return ONLY valid JSON with minsait_capability_match analysis.
+```
 
-Retorne JSON:
-{
-  "recommendation": "GO|GO_CONDITIONAL|NO_GO",
-  "confidence": 0.0-1.0,
-  "headline": "1 frase com o motivo principal",
-  "scorecard": [...],
-  "blockers_p0": [...],
-  "actions_next_48h": [...]
-}
+### 5.4 Prompt 4: RFP_GoNoGo_Score ✅ DEPLOYED
+
+| Propriedade | Valor |
+|---|---|
+| **Ambiente** | ColOfertasBrasilPro |
+| **Modelo** | GPT-4.1 |
+| **Inputs** | `classification_json`, `extracted_fields_json`, `tech_catalog_json`, `document_text` (todos Texto) |
+
+**Instrução:**
+```
+You are a strategic assessment agent for Minsait (Indra Group).
+Evaluate RFP opportunities with 5 weighted scoring dimensions:
+strategic_fit 25%, technical_viability 20%, estimated_margin 20%,
+timeline_capacity 15%, contract_risk 20%.
+Score 1-5 each. NEVER inflate scores. Be conservative.
+Minsait rate 180 BRL/hour.
+Thresholds: >= 3.5 GO, >= 2.5 GO_CONDITIONAL, < 2.5 NO_GO.
+Return ONLY valid JSON with dimensions, weighted_total, recommendation.
 ```
 
 ---
@@ -423,19 +440,19 @@ Retorne JSON:
 
 ### 11.1 Ambientes Power Platform
 
-| Ambiente | Propósito | URL |
-|---|---|---|
-| **DEV** | Desenvolvimento e testes | `copilotstudio.microsoft.com` (env dev) |
-| **TEST** | Testes com ofertas reais (cópias) | Mesmo tenant, flows desabilitados |
-| **PROD** | Monitoramento real | Flows habilitados |
+| Ambiente | Propósito | URL | Status |
+|---|---|---|---|
+| **ColOfertasBrasilPro** | Desenvolvimento + Produção | `make.powerapps.com` | ✅ ATIVO |
+| **DEV** | Testes isolados (futuro) | — | ⏳ FUTURO |
+| **TEST** | Testes com ofertas reais (cópias) | — | ⏳ FUTURO |
 
 ### 11.2 Critérios de Promoção
 
 **DEV → TEST:**
 - [ ] Flows 1-3 criados e testados individualmente
-- [ ] AI Builder prompts retornando JSON válido
-- [ ] Dataverse tables criadas
-- [ ] SharePoint site criado com estrutura de pastas
+- [x] AI Builder prompts deployados e publicados (4/4)
+- [x] Dataverse tables criadas (rfp_ofertas + rfp_scorecarditem)
+- [x] SharePoint site criado com estrutura de pastas
 
 **TEST → PROD:**
 - [ ] 3 ofertas reais processadas com sucesso
@@ -448,13 +465,13 @@ Retorne JSON:
 
 ## 12. Próximos Passos (após aprovação)
 
-1. **Criar SharePoint site** `/sites/OfertasDN/` com estrutura de pastas
-2. **Criar Dataverse tables** (Ofertas + Scorecard_Items)
-3. **Criar AI Builder Prompts** (4 prompts no Prompt Builder)
-4. **Criar Power Automate Flows** (3 flows: Trigger + Pipeline + Report)
-5. **Criar template Word** GO_NO_GO_Report_Template.docx
-6. **Criar Copilot Studio Agent** (Fase 2: interface conversacional)
-7. **Testar E2E** com 3 ofertas da Ofertas DN
+1. ~~**Criar SharePoint site**~~ ✅ DONE — `/sites/OfertasDN/` com Ofertas + Templates
+2. ~~**Criar Dataverse tables**~~ ✅ DONE — rfp_ofertas (26 colunas) + rfp_scorecarditem
+3. ~~**Criar AI Builder Prompts**~~ ✅ DONE — 4 prompts GPT-4.1 publicados
+4. **Criar Power Automate Flows** — 3 flows: Trigger + Pipeline + Report ⏳ PRÓXIMO
+5. **Criar template Word** GO_NO_GO_Report_Template.docx ⏳ PENDENTE
+6. **Criar Copilot Studio Agent** (Fase 2: interface conversacional) ⏳ FUTURO
+7. **Testar E2E** com 3 ofertas da Ofertas DN ⏳ APÓS FLOWS
 
 ---
 
@@ -462,6 +479,6 @@ Retorne JSON:
 
 | Papel | Nome | Status | Data |
 |---|---|---|---|
-| Arquiteto / Líder de Prática | Manoel Benicio | ⏳ PENDING | — |
+| Arquiteto / Líder de Prática | Manoel Benicio | ✅ IN PROGRESS | 2026-04-05 |
 
-> **GATE:** Nenhuma implementação será iniciada antes da aprovação por escrito deste documento.
+> **Nota:** Implementação da infraestrutura (SharePoint, Dataverse, AI Builder) foi aprovada e executada. Flows pendentes de deployment.
